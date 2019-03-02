@@ -1,4 +1,4 @@
-# EasyPlotly
+# EasyPlotly For Python Notebooks
 An easy wrapper for making plotly plots in python notebooks
 
 ```python
