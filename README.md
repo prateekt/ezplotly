@@ -8,3 +8,5 @@ exampleHist = EP.hist(data=a,minBin=0.0,maxBin=1.0,binSize=0.1,title='MyHistogra
 exampleScatter = EP.scattergl(x=a,y=b,title='Test',xlabel='x',ylabel='y')
 EP.plotAll([exampleHist,exampleScatter])
 ```
+
+There's also a bioinformatics extension (EasyPlotly_bio) in the works for making common bioinformatics plots.
