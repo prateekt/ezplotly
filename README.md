@@ -9,4 +9,4 @@ exampleScatter = EP.scattergl(x=a,y=b,title='Test',xlabel='x',ylabel='y')
 EP.plotAll([exampleHist,exampleScatter])
 ```
 
-There's also a bioinformatics extension (EasyPlotly_bio) in the works for making common bioinformatics plots.
+There's also a bioinformatics extension (EasyPlotly_bio) in the works for making common bioinformatics plots such as qqplots, chromosome rolling medians, chromsome count bar charts, and chromosome histograms.
