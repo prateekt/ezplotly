@@ -1,7 +1,10 @@
 import EasyPlotly as EP
+import YayROCS as YP
 import pandas as pd
 import scipy.stats as sc
 import numpy as np
+import sklearn.metrics
+
 
 def chrRollingMedian(chrPosDF,chrValDF,rollwinsize,ylabel=None,title=None,withhold=False,ylim=None):
 
@@ -28,6 +31,51 @@ def chrCount(boolVals,chrDF,title=None,withhold=False):
 	
 	#plot
 	barPlot = EP.bar(counts,x=uniqVals,title=title,xlabel='Chromosome',ylabel='Count')
+	if(withhold):
+		return barPlot
+	else:
+		EP.plotAll([barPlot])
+
+def chrDistr(data,chrDF,distrName,title=None,withhold=False):
+
+	#extract unique chr vals
+	uniqVals = chrDF.unique()
+
+	#make chromosome-level counts
+	pVals = np.zeros((len(uniqVals),))
+	cnt=0
+	for u in uniqVals:
+		chrDat = data[chrDF==u]
+		res= sc.kstest(chrDat,distrName)
+		pVals[cnt]  = res[1]
+		cnt = cnt + 1
+	
+	#plot
+	barPlot = EP.bar(pVals,x=uniqVals,title=title,xlabel='Chromosome',ylabel='P-value (Null: Data is '+distrName+')',ylim=[0,1])
+	if(withhold):
+		return barPlot
+	else:
+		EP.plotAll([barPlot])
+
+def chrCountDistr(boolVals,chrDF,title=None,withhold=False):
+	#bool vals = N pos x M replicates
+
+	#extract unique chr vals
+	uniqVals = chrDF.unique()
+
+	#make chromosome-level counts
+	means = np.zeros((len(uniqVals),))
+	stds = np.zeros((len(uniqVals),))
+	cnt=0
+	for u in uniqVals:
+		reps = boolVals[chrDF==u]
+		sums = np.sum(reps,axis=0)
+		means[cnt] = np.mean(sums)
+		stds[cnt] = np.std(sums)
+		cnt = cnt + 1
+	
+	#plot
+	barPlot = EP.bar(y=means,x=uniqVals,error_y=stds,title=title,xlabel='Chromosome',ylabel='Count')
 	if(withhold):
 		return barPlot
 	else:
@@ -75,3 +123,55 @@ def qqplot(data,sparams=(),dist='norm',title=None):
 	ptsScatter = EP.scattergl(x=qq[0][0],y=qq[0][1],title=title,xlabel='Expected',ylabel='Observed',markerSize=5,markerColor='blue',xlim=[0.0,1.05])
 	linePlot = EP.line(x=x,y=qq[1][1] + qq[1][0]*x,width=3,color='red',title=title)
 	return (ptsScatter,linePlot)
+
+def roc(preds,gt,panel=1,names=None,title=None,xScale=None,yScale=None):
+
+	#structure
+	plots = list()
+	panels = list()
+
+	#add chance curve
+	p = EP.line(x=np.arange(0.0,1.1,0.01),y=np.arange(0.0,1.1,0.01),width=2,name='Chance Curve',color='black',xlabel='False Positive Rate',ylabel='True Positive Rate',title=title,xlim=[0,0.1],ylim=[0,1],xScale=xScale,yScale=yScale,x_dTick=0.1,y_dTick=0.1)
+	plots.append(p)
+	panels.append(panel)
+
+	#for each predictor compute roc curve
+	for i in range(0,preds.shape[1]):
+		fpr,tpr = YP.roc(preds[:,i],gt)
+#		fpr,tpr,_ = sklearn.metrics.roc_curve(gt,preds[:,i])
+		name=None
+		if(names!=None):
+			name = names[i]
+		p = EP.line(x=fpr,y=tpr,width=2,name=name,xlim=[0,0.1],ylim=[0,1],xScale=xScale,yScale=yScale,x_dTick=0.1,y_dTick=0.1)
+		plots.append(p)
+		panels.append(panel)
+
+	#return
+	return (plots,panels)
+
+def ecdf(data,minBin,maxBin,binSize,title=None,xlabel=None,norm=False):
+	counts, bin_edges = np.histogram(data, bins=np.arange(minBin,maxBin,binSize))
+	countsSum = np.sum(counts)
+	counts = counts / countsSum
+	cdf = np.cumsum(counts)
+	if(not norm):
+		cdfLine = EP.line(x=bin_edges[1:],y=countsSum*cdf,title=title,xlabel=xlabel,ylabel='Cum Freq',xlim=[minBin,maxBin])
+	else:
+		cdfLine = EP.line(x=bin_edges[1:],y=cdf,title=title,xlabel=xlabel,ylabel='CDF',xlim=[minBin,maxBin],ylim=[0,1.0])
+	return cdfLine
+
+def rcdf(data,minBin,maxBin,binSize,title=None,xlabel=None,norm=False):
+	counts, bin_edges = np.histogram(data, bins=np.arange(minBin,maxBin,binSize))
+	countsSum = np.sum(counts)
+	counts = counts / countsSum
+	cdf = np.cumsum(counts)
+	if(not norm):
+		cdfLine = EP.line(x=bin_edges[1:],y=countsSum*(1-cdf),title=title,xlabel=xlabel,ylabel='Cum Freq',xlim=[minBin,maxBin])
+	else:
+		cdfLine = EP.line(x=bin_edges[1:],y=(1-cdf),title=title,xlabel=xlabel,ylabel='CDF',xlim=[minBin,maxBin],ylim=[0,1.0])
+	return cdfLine
+
+def corrPlot(x,y,xlabel=None,ylabel=None,title=None):
+	corrVal = pd.core.nanops.nancorr(x,y)
+	scatterPlot = EP.scattergl(x=x,y=y,xlabel=xlabel,ylabel=ylabel,title=title,name='corr='+str(corrVal))
+	return scatterPlot

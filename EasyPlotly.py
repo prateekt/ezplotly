@@ -4,10 +4,17 @@ import plotly.graph_objs as go
 import numpy as np
 import copy
 
-def hist(data,minBin=None,maxBin=None,binSize=None,title=None,name='hist',xlabel='x',ylabel='Frequency',color=None):
+def hist(data,minBin=None,maxBin=None,binSize=None,histnorm=None,title=None,name=None,xlabel=None,ylabel=None,color=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None):
 
 	#plot type
 	plotType='histogram'
+	if(ylabel==None):
+		if(histnorm=='probability'):
+			ylabel = 'Probability'
+		else:
+			ylabel = 'Frequency'
+		if(yScale=='log'):
+			ylabel = 'log ' + ylabel
 
 	#xbin properties
 	if(minBin==None or maxBin==None or binSize==None):
@@ -29,13 +36,14 @@ def hist(data,minBin=None,maxBin=None,binSize=None,title=None,name='hist',xlabel
 		x=data,
 		name=name,
 		xbins=xbins,
-		marker=marker
+		marker=marker,
+		histnorm=histnorm
 	)
 
 	#return
-	return (plotType,title,xlabel,ylabel,histObj,xlim,ylim)
+	return (plotType,title,xlabel,ylabel,histObj,xlim,ylim,xScale,yScale,x_dTick,y_dTick)
 
-def bar(y,x=(),error_y=None,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,name=None):
+def bar(y,x=(),error_y=None,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,name=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None):
 
 	#plot type
 	plotType='bar'
@@ -57,9 +65,9 @@ def bar(y,x=(),error_y=None,title=None,xlabel=None,ylabel=None,xlim=None,ylim=No
 	)
 
 	#return
-	return (plotType,title,xlabel,ylabel,barObj,xlim,ylim)
+	return (plotType,title,xlabel,ylabel,barObj,xlim,ylim,xScale,yScale,x_dTick,y_dTick)
 
-def scattergl(x,y,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,markerSize=None,markerColor=None):
+def scattergl(x,y,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,markerSize=None,markerColor=None,name=None,pointAnno=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None):
 
 	#plot type
 	plotType='scattergl'
@@ -73,17 +81,19 @@ def scattergl(x,y,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,markerS
 
 	#make scatter gl object
 	scatterObj = go.Scattergl(
+		name=name,
 		x=x,
 		y=y,
 		mode='markers',
 		visible=True,
-		marker=marker
+		marker=marker,
+		text=pointAnno
 	)
 	
 	#return
-	return(plotType,title,xlabel,ylabel,scatterObj,xlim,ylim)
+	return(plotType,title,xlabel,ylabel,scatterObj,xlim,ylim,xScale,yScale,x_dTick,y_dTick)
 
-def line(x,y,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,width=None,color=None):
+def line(x,y,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,width=None,color=None,pointAnno=None,name=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None):
 
 	#plot type
 	plotType='line'
@@ -97,13 +107,28 @@ def line(x,y,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,width=None,c
 
 	#make scatter object
 	scatterObj = go.Scattergl(
+		name=name,
 		x=x,
 		y=y,
-		line=line	
+		line=line
 	)
 
 	#return
-	return(plotType,title,xlabel,ylabel,scatterObj,xlim,ylim)
+	return(plotType,title,xlabel,ylabel,scatterObj,xlim,ylim,xScale,yScale,x_dTick,y_dTick)
+
+def violin(y,title=None,xlabel=None,ylabel=None,name=None,xlim=None,ylim=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None):
+
+	#plot type
+	plotType='violin'
+
+	#make violin object
+	violinObj = go.Violin(
+		y=y,
+		name=name
+	)
+
+	#return
+	return(plotType,title,xlabel,ylabel,violinObj,xlim,ylim,xScale,yScale,x_dTick,y_dTick)
 
 def show(fig):
 	plotly.offline.iplot(fig,filename='Subplot')
@@ -112,7 +137,7 @@ def extractPanelTitlePositions(fig):
 	titleAnnotations = list(fig['layout']['annotations'])
 	return {t['text']: (t['x'],t['y']) for t in titleAnnotations}
 
-def plotAll(plots,panels=None,height=None,width=None,withhold=False,numCols=2,title=None,showlegend=False,chrPacked=False):
+def plotAll(plots,panels=None,height=None,width=None,withhold=False,numCols=2,title=None,showLegend=False,chrPacked=False):
 
 	#compute num panels needed to display everything
 	if(panels==None):
@@ -160,6 +185,10 @@ def plotAll(plots,panels=None,height=None,width=None,withhold=False,numCols=2,ti
 		plot = p[4]
 		xlim = p[5]
 		ylim = p[6]
+		xScale = p[7]
+		yScale = p[8]
+		x_dTick = p[9]
+		y_dTick = p[10]
 
 		#row/col
 		rowIndex = int((panelIndex-1) / numCols + 1)
@@ -193,13 +222,21 @@ def plotAll(plots,panels=None,height=None,width=None,withhold=False,numCols=2,ti
 			fig['layout']['xaxis'+str(panelIndex)].update(title=xlabel)
 		if(ylabel!=None):
 			fig['layout']['yaxis'+str(panelIndex)].update(title=ylabel)
+		if(xScale!=None):
+			fig['layout']['xaxis'+str(panelIndex)].update(type=xScale)
+		if(yScale!=None):
+			fig['layout']['yaxis'+str(panelIndex)].update(type=yScale)
+		if(x_dTick!=None):
+			fig['layout']['xaxis'+str(panelIndex)].update(dtick=x_dTick)
+		if(y_dTick!=None):
+			fig['layout']['xaxis'+str(panelIndex)].update(dtick=y_dTick)
 		if(xlim!=None):
-			fig['layout']['xaxis'+str(panelIndex)].update(range=xlim,autorange=False)
+			fig['layout']['xaxis'+str(panelIndex)].update(range=xlim,autorange=False,tick0=xlim[0])
 		if(ylim!=None):
-			fig['layout']['yaxis'+str(panelIndex)].update(range=ylim,autorange=False)
+			fig['layout']['yaxis'+str(panelIndex)].update(range=ylim,autorange=False,tick0=ylim[0])
 
 	#set overall layout and either withold plot or display it
-	fig['layout'].update(height=height,width=width,showlegend=showlegend,title=title)
+	fig['layout'].update(height=height,width=width,showlegend=showLegend,title=title)
 	if(withhold): 	#return fig (if additional custom changes need to be made)
 		return fig
 	else:
