@@ -131,7 +131,7 @@ def roc(preds,gt,panel=1,names=None,title=None,xScale=None,yScale=None):
 	panels = list()
 
 	#add chance curve
-	p = EP.line(x=np.arange(0.0,1.1,0.01),y=np.arange(0.0,1.1,0.01),width=2,name='Chance Curve',color='black',xlabel='False Positive Rate',ylabel='True Positive Rate',title=title,xlim=[0,0.1],ylim=[0,1],xScale=xScale,yScale=yScale,x_dTick=0.1,y_dTick=0.1)
+	p = EP.line(x=np.arange(0.0,1.1,0.01),y=np.arange(0.0,1.1,0.01),width=2,name='Chance Curve',color='black',xlabel='False Positive Rate',ylabel='True Positive Rate',title=title,xlim=[0,1],ylim=[0,1],xScale=xScale,yScale=yScale,x_dTick=0.1,y_dTick=0.1)
 	plots.append(p)
 	panels.append(panel)
 
@@ -142,7 +142,7 @@ def roc(preds,gt,panel=1,names=None,title=None,xScale=None,yScale=None):
 		name=None
 		if(names!=None):
 			name = names[i]
-		p = EP.line(x=fpr,y=tpr,width=2,name=name,xlim=[0,0.1],ylim=[0,1],xScale=xScale,yScale=yScale,x_dTick=0.1,y_dTick=0.1)
+		p = EP.line(x=fpr,y=tpr,width=2,name=name,xlim=[0,1],ylim=[0,1],xScale=xScale,yScale=yScale,x_dTick=0.1,y_dTick=0.1)
 		plots.append(p)
 		panels.append(panel)
 

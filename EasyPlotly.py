@@ -130,6 +130,17 @@ def violin(y,title=None,xlabel=None,ylabel=None,name=None,xlim=None,ylim=None,xS
 	#return
 	return(plotType,title,xlabel,ylabel,violinObj,xlim,ylim,xScale,yScale,x_dTick,y_dTick)
 
+def heatmap(z,xlabels=None,ylabels=None,title=None,xlabel=None,ylabel=None,name=None,xlim=None,ylim=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None):
+	
+	#plot type
+	plotType = 'heatmap'
+
+	#make heatmap object
+	heatmapObj = go.Heatmap(z=z,x=xlabels,y=ylabels)
+
+	#return
+	return(plotType,title,xlabel,ylabel,heatmapObj,xlim,ylim,xScale,yScale,x_dTick,y_dTick)
+
 def show(fig):
 	plotly.offline.iplot(fig,filename='Subplot')
 
