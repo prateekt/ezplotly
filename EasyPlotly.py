@@ -130,13 +130,21 @@ def violin(y,title=None,xlabel=None,ylabel=None,name=None,xlim=None,ylim=None,xS
 	#return
 	return(plotType,title,xlabel,ylabel,violinObj,xlim,ylim,xScale,yScale,x_dTick,y_dTick)
 
-def heatmap(z,xlabels=None,ylabels=None,title=None,xlabel=None,ylabel=None,name=None,xlim=None,ylim=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None):
+def heatmap(z,xlabels=None,ylabels=None,title=None,xlabel=None,ylabel=None,name=None,xlim=None,ylim=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None,cScale=None):
 	
 	#plot type
 	plotType = 'heatmap'
 
+	#color scale
+	if(cScale==None):
+		zmin=None
+		zmax=None
+	else:
+		zmin=cScale[0]
+		zmax=cScale[1]
+
 	#make heatmap object
-	heatmapObj = go.Heatmap(z=z,x=xlabels,y=ylabels)
+	heatmapObj = go.Heatmap(z=z,x=xlabels,y=ylabels,zmin=zmin,zmax=zmax)
 
 	#return
 	return(plotType,title,xlabel,ylabel,heatmapObj,xlim,ylim,xScale,yScale,x_dTick,y_dTick)

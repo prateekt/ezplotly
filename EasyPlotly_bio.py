@@ -117,11 +117,13 @@ def chrQQ(df,chrCol,colName,sparams=(),dist='norm',title=None):
 	#make plot
 	EP.plotAll(plots,panels=panels,numCols=5,height=1000,title=title,chrPacked=True)
 
-def qqplot(data,sparams=(),dist='norm',title=None):
+def qqplot(data,sparams=(),dist='norm',title=None,name=None,markerColor='blue',lineColor='red'):
 	qq = sc.probplot(data,dist=dist,sparams=sparams)
 	x=np.array([qq[0][0][0],qq[0][0][-1]])
-	ptsScatter = EP.scattergl(x=qq[0][0],y=qq[0][1],title=title,xlabel='Expected',ylabel='Observed',markerSize=5,markerColor='blue',xlim=[0.0,1.05])
-	linePlot = EP.line(x=x,y=qq[1][1] + qq[1][0]*x,width=3,color='red',title=title)
+	ptsScatter = EP.scattergl(x=qq[0][0],y=qq[0][1],title=title,xlabel='Expected',ylabel='Observed',markerSize=5,markerColor=markerColor,xlim=[0.0,1.05],name=name)
+	if(name==None):
+		name = ''	
+	linePlot = EP.line(x=x,y=qq[1][1] + qq[1][0]*x,width=3,color=lineColor,title=title,name=(name + ' (distribution='+dist+')'))
 	return (ptsScatter,linePlot)
 
 def roc(preds,gt,panel=1,names=None,title=None,xScale=None,yScale=None):
