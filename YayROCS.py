@@ -4,7 +4,7 @@ import numpy as np
 def roc(pred,gt):
 
 	#make results table
-	results = np.stack([pred,gt]).T
+	results = np.concatenate([pred,gt],axis=1)
 
 	#compute step sizes
 	A = results.shape[0]
@@ -36,8 +36,8 @@ def roc(pred,gt):
 
 	#resize and return
 	cnt = cnt - 1
-	TPR = TPR[0:cnt]
-	FPR = FPR[0:cnt]
+	TPR = TPR[0:cnt].reshape(1,-1)
+	FPR = FPR[0:cnt].reshape(1,-1)
 	return(FPR,TPR)
 
 #input (N rocs by M binning of ROC)
@@ -51,12 +51,12 @@ def auc(X,Y):
 	for j in range(0,N):
 
 		#align each to reference binning
-		ref_binning = np.range(0,1.1,0.01)
+		ref_binning = np.arange(0,1.1,0.01)
 		binInd = 0
 		for i in range(0,len(ref_binning)):
 
 			#find appropriate bin to draw
-			while((ref_binning[i] > X[j,binInd]) and (binInd < X.shape[1])):
+			while((binInd < (X.shape[1]-1)) and (ref_binning[i] > X[j,binInd])):
 				binInd = binInd + 1
 			AUCs[j] = AUCs[j] + Y[j,binInd]
 		AUCs[j] = AUCs[j] / len(ref_binning)

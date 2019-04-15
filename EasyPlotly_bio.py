@@ -151,26 +151,26 @@ def roc(preds,gt,panel=1,names=None,title=None,xScale=None,yScale=None):
 	#return
 	return (plots,panels)
 
-def ecdf(data,minBin,maxBin,binSize,title=None,xlabel=None,norm=False):
+def ecdf(data,minBin,maxBin,binSize,title=None,xlabel=None,norm=False,name=None,xScale=None,yScale=None):
 	counts, bin_edges = np.histogram(data, bins=np.arange(minBin,maxBin,binSize))
 	countsSum = np.sum(counts)
 	counts = counts / countsSum
 	cdf = np.cumsum(counts)
 	if(not norm):
-		cdfLine = EP.line(x=bin_edges[1:],y=countsSum*cdf,title=title,xlabel=xlabel,ylabel='Cum Freq',xlim=[minBin,maxBin])
+		cdfLine = EP.line(x=bin_edges[1:],y=countsSum*cdf,title=title,xlabel=xlabel,ylabel='Cum Freq',xlim=[minBin,maxBin],name=name,xScale=xScale,yScale=yScale)
 	else:
-		cdfLine = EP.line(x=bin_edges[1:],y=cdf,title=title,xlabel=xlabel,ylabel='CDF',xlim=[minBin,maxBin],ylim=[0,1.0])
+		cdfLine = EP.line(x=bin_edges[1:],y=cdf,title=title,xlabel=xlabel,ylabel='CDF',xlim=[minBin,maxBin],ylim=[0,1.0],name=name,xScale=xScale,yScale=yScale)
 	return cdfLine
 
-def rcdf(data,minBin,maxBin,binSize,title=None,xlabel=None,norm=False):
+def rcdf(data,minBin,maxBin,binSize,title=None,xlabel=None,norm=False,name=None,xScale=None,yScale=None):
 	counts, bin_edges = np.histogram(data, bins=np.arange(minBin,maxBin,binSize))
 	countsSum = np.sum(counts)
 	counts = counts / countsSum
 	cdf = np.cumsum(counts)
 	if(not norm):
-		cdfLine = EP.line(x=bin_edges[1:],y=countsSum*(1-cdf),title=title,xlabel=xlabel,ylabel='Cum Freq',xlim=[minBin,maxBin])
+		cdfLine = EP.line(x=bin_edges[1:],y=countsSum*(1-cdf),title=title,xlabel=xlabel,ylabel='Cum Freq',xlim=[minBin,maxBin],name=name,xScale=xScale,yScale=yScale)
 	else:
-		cdfLine = EP.line(x=bin_edges[1:],y=(1-cdf),title=title,xlabel=xlabel,ylabel='CDF',xlim=[minBin,maxBin],ylim=[0,1.0])
+		cdfLine = EP.line(x=bin_edges[1:],y=(1-cdf),title=title,xlabel=xlabel,ylabel='CDF',xlim=[minBin,maxBin],ylim=[0,1.0],name=name,xScale=xScale,yScale=yScale)
 	return cdfLine
 
 def corrPlot(x,y,xlabel=None,ylabel=None,title=None):
