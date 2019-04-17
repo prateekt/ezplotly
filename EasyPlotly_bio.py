@@ -127,6 +127,8 @@ def qqplot(data,sparams=(),dist='norm',title=None,name=None,markerColor='blue',l
 	return (ptsScatter,linePlot)
 
 def roc(preds,gt,panel=1,names=None,title=None,xScale=None,yScale=None):
+	#preds = N-ROC x L
+	#gt = (L,)
 
 	#structure
 	plots = list()
@@ -138,8 +140,8 @@ def roc(preds,gt,panel=1,names=None,title=None,xScale=None,yScale=None):
 	panels.append(panel)
 
 	#for each predictor compute roc curve
-	for i in range(0,preds.shape[1]):
-		fpr,tpr = YP.roc(preds[:,i],gt)
+	for i in range(0,preds.shape[0]):
+		fpr,tpr = YP.roc(preds[i,:],gt)
 #		fpr,tpr,_ = sklearn.metrics.roc_curve(gt,preds[:,i])
 		name=None
 		if(names!=None):

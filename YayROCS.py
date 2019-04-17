@@ -3,6 +3,16 @@ import numpy as np
 #input = predictor vector, ground truth vector
 def roc(pred,gt):
 
+	#make sure pred /gt are correct shape
+	if((pred.ndim==2) and (pred.shape[1] > pred.shape[0])):
+		pred = pred.T
+	elif((pred.ndim==1)):
+		pred = pred.reshape(-1,1)
+	if((gt.ndim==2) and (gt.shape[1] > gt.shape[0])):
+		gt = gt.T
+	elif((gt.ndim==1)):
+		gp = gp.rehsape(-1,1)
+
 	#make results table
 	results = np.concatenate([pred,gt],axis=1)
 
@@ -36,28 +46,21 @@ def roc(pred,gt):
 
 	#resize and return
 	cnt = cnt - 1
-	TPR = TPR[0:cnt].reshape(1,-1)
-	FPR = FPR[0:cnt].reshape(1,-1)
+	TPR = TPR[0:cnt]
+	FPR = FPR[0:cnt]
 	return(FPR,TPR)
 
-#input (N rocs by M binning of ROC)
+#input 1 roc (X,Y)
 def auc(X,Y):
 
-	#extract lengths
-	N = X.shape[0]
-
-	#compute AUCs for each roc
-	AUCs = np.zeros((N,1))
-	for j in range(0,N):
-
-		#align each to reference binning
-		ref_binning = np.arange(0,1.1,0.01)
-		binInd = 0
-		for i in range(0,len(ref_binning)):
-
-			#find appropriate bin to draw
-			while((binInd < (X.shape[1]-1)) and (ref_binning[i] > X[j,binInd])):
-				binInd = binInd + 1
-			AUCs[j] = AUCs[j] + Y[j,binInd]
-		AUCs[j] = AUCs[j] / len(ref_binning)
-	return AUCs
+	#align to reference binning
+	ref_binning = np.arange(0,1.1,0.01)
+	binInd = 0
+	AUC = 0
+	for i in range(0,len(ref_binning)):
+		#find appropriate bin to draw
+		while((binInd < (len(X)-1)) and (ref_binning[i] > X[binInd])):
+			binInd = binInd + 1
+		AUC = AUC + Y[binInd]
+	AUC = AUC / len(ref_binning)
+	return AUC
