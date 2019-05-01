@@ -64,3 +64,27 @@ def auc(X,Y):
 		AUC = AUC + Y[binInd]
 	AUC = AUC / len(ref_binning)
 	return AUC
+	
+#compute p-value based on distribution and observed point
+def computePValue(distr,observed,tailed='two-tailed'):
+
+	#combine data and sort
+	combinedData = np.append(distr,observed)
+	combinedData.sort()
+	N = len(combinedData)
+
+	#identify ranks
+	rank = np.where(combinedData==observed)
+	lrank = rank[0][0]
+	rrank = N-rank[0][-1]-1
+
+	#tails
+	lp = lrank / N
+	rp = rrank / N
+	if(tailed=='left'):
+		pVal = lp
+	elif(tailed=='right'):
+		pVal = rp
+	elif(tailed=='two-tailed'):
+		pVal = np.min([lp,rp])
+	return pVal
