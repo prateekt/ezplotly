@@ -248,7 +248,7 @@ def plotAll(plots,panels=None,height=None,width=None,withhold=False,numCols=2,ti
 		if(x_dTick!=None):
 			fig['layout']['xaxis'+str(panelIndex)].update(dtick=x_dTick)
 		if(y_dTick!=None):
-			fig['layout']['xaxis'+str(panelIndex)].update(dtick=y_dTick)
+			fig['layout']['yaxis'+str(panelIndex)].update(dtick=y_dTick)
 		if(xlim!=None):
 			fig['layout']['xaxis'+str(panelIndex)].update(range=xlim,autorange=False,tick0=xlim[0])
 		if(ylim!=None):
