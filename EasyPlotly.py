@@ -50,7 +50,7 @@ def bar(y,x=(),error_y=None,title=None,xlabel=None,ylabel=None,xlim=None,ylim=No
 
 	#define x
 	if(len(x)==0):
-		x = range(0,len(y))	
+		x = [a for a in range(0,len(y))]
 
 	#assemble bar object
 	barObj = go.Bar(

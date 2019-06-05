@@ -5,6 +5,22 @@ import scipy.stats as sc
 import numpy as np
 import sklearn.metrics
 
+def manhattanPlot(df,posColName,pvalueColName,title=None,height=None):
+
+	#plot
+	runningPos=0
+	cnt=0
+	h = [None]*22
+	for chrs in range(1,23):
+		chrName = 'chr'+str(chrs)
+		chrDF = df[df.Chr==chrName]
+		maxPos = np.max(chrDF[posColName].values)
+		ptsX = chrDF[posColName].values + runningPos
+		ptsY = -1*np.log10(chrDF[pvalueColName].values)
+		h[chrs-1] = EP.scattergl(ptsX,ptsY,name=chrName,xlabel='Chromosome',ylabel='-log10(p)',title=title,markerSize=3)
+		cnt = cnt + len(chrDF)
+		runningPos = runningPos+maxPos
+	EP.plotAll(h,panels=np.ones((len(h),),dtype=int).tolist(),numCols=1,showLegend=True,height=height)
 
 def chrRollingMedian(chrPosDF,chrValDF,rollwinsize,ylabel=None,title=None,withhold=False,ylim=None):
 
@@ -120,7 +136,7 @@ def chrQQ(df,chrCol,colName,sparams=(),dist='norm',title=None):
 def qqplot(data,sparams=(),dist='norm',title=None,name=None,markerColor='blue',lineColor='red'):
 	qq = sc.probplot(data,dist=dist,sparams=sparams)
 	x=np.array([qq[0][0][0],qq[0][0][-1]])
-	ptsScatter = EP.scattergl(x=qq[0][0],y=qq[0][1],title=title,xlabel='Expected',ylabel='Observed',markerSize=5,markerColor=markerColor,xlim=[0.0,1.05],name=name)
+	ptsScatter = EP.scattergl(x=qq[0][0],y=qq[0][1],title=title,xlabel='Expected',ylabel='Observed',markerSize=5,markerColor=markerColor,name=name)
 	if(name==None):
 		name = ''	
 	linePlot = EP.line(x=x,y=qq[1][1] + qq[1][0]*x,width=3,color=lineColor,title=title,name=(name + ' (distribution='+dist+')'))
