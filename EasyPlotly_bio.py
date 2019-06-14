@@ -199,7 +199,11 @@ def rcdf(data,minBin,maxBin,binSize,title=None,xlabel=None,ylabel=None,norm=Fals
 		cdfLine = EP.line(x=bin_edges[1:],y=(1-cdf),title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin],ylim=[0,1.0],name=name,xScale=xScale,yScale=yScale)
 	return cdfLine
 
-def corrPlot(x,y,xlabel=None,ylabel=None,title=None):
+def corrPlot(x,y,xlabel=None,ylabel=None,title=None,name=None):
 	corrVal = pd.core.nanops.nancorr(x,y)
-	scatterPlot = EP.scattergl(x=x,y=y,xlabel=xlabel,ylabel=ylabel,title=title,name='corr='+str(corrVal))
+	if(name==None):
+		name = 'corr='+str(np.round(corrVal,3))
+	else:
+		name = name + ' ('+'corr='+str(np.round(corrVal,3))+')'
+	scatterPlot = EP.scattergl(x=x,y=y,xlabel=xlabel,ylabel=ylabel,title=title,name=name)
 	return scatterPlot
