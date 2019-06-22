@@ -97,8 +97,14 @@ def chrCountDistr(boolVals,chrDF,title=None,withhold=False):
 	else:
 		EP.plotAll([barPlot])
 
-def chrHist(df,chrCol,colName,minBin=None,maxBin=None,binSize=None,title=None):
+def chrHist(df,chrCol,colName,minBin=None,maxBin=None,binSize=None,title=None,xlabel=None,ylabel=None,histnorm=None,x_dTick=None,y_dTick=None):
 	
+	#labels
+	if(xlabel==None):
+		xlabel = colName
+	if(ylabel==None):
+		ylabel = 'Count'
+
 	#extract unique chr values
 	uniqVals = df.iloc[:,chrCol].unique()
 
@@ -106,7 +112,7 @@ def chrHist(df,chrCol,colName,minBin=None,maxBin=None,binSize=None,title=None):
 	hists = list()
 	for u in uniqVals:
 		data = df[colName][df.iloc[:,chrCol]==u]
-		EPHist = EP.hist(data,title=u,xlabel=colName,minBin=minBin,maxBin=maxBin,binSize=binSize,ylabel='Count',color='#1ad1ff')
+		EPHist = EP.hist(data,title=u,xlabel=xlabel,minBin=minBin,maxBin=maxBin,binSize=binSize,ylabel=ylabel,color='#1ad1ff',histnorm=histnorm,x_dTick=x_dTick,y_dTick=y_dTick)
 		hists.append(EPHist)
 	
 	#make plot
@@ -199,11 +205,11 @@ def rcdf(data,minBin,maxBin,binSize,title=None,xlabel=None,ylabel=None,norm=Fals
 		cdfLine = EP.line(x=bin_edges[1:],y=(1-cdf),title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin],ylim=[0,1.0],name=name,xScale=xScale,yScale=yScale)
 	return cdfLine
 
-def corrPlot(x,y,xlabel=None,ylabel=None,title=None,name=None,xScale=None,yScale=None):
+def corrPlot(x,y,xlabel=None,ylabel=None,title=None,name=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None):
 	corrVal = pd.core.nanops.nancorr(x,y)
 	if(name==None):
 		name = 'corr='+str(np.round(corrVal,3))
 	else:
 		name = name + ' ('+'corr='+str(np.round(corrVal,3))+')'
-	scatterPlot = EP.scattergl(x=x,y=y,xlabel=xlabel,ylabel=ylabel,title=title,name=name,xScale=xScale,yScale=yScale)
+	scatterPlot = EP.scattergl(x=x,y=y,xlabel=xlabel,ylabel=ylabel,title=title,name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick)
 	return scatterPlot
