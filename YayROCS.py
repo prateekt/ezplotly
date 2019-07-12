@@ -11,7 +11,7 @@ def roc(pred,gt):
 	if((gt.ndim==2) and (gt.shape[1] > gt.shape[0])):
 		gt = gt.T
 	elif((gt.ndim==1)):
-		gp = gp.rehsape(-1,1)
+		gt = gt.reshape(-1,1)
 
 	#make results table
 	results = np.concatenate([pred,gt],axis=1)

@@ -105,20 +105,35 @@ def chrHist(df,chrCol,colName,minBin=None,maxBin=None,binSize=None,title=None,xl
 	if(ylabel==None):
 		ylabel = 'Count'
 
+	#chrs
+	chrsList = list()
+	for i in range(1,23):
+		chrsList.append('chr'+str(i))
+	chrsList.append('chrX')
+	chrsList.append('chrY')
+
 	#extract unique chr values
 	uniqVals = df.iloc[:,chrCol].unique()
 
 	#make chromosome level hists
 	hists = list()
-	for u in uniqVals:
-		data = df[colName][df.iloc[:,chrCol]==u]
-		EPHist = EP.hist(data,title=u,xlabel=xlabel,minBin=minBin,maxBin=maxBin,binSize=binSize,ylabel=ylabel,color='#1ad1ff',histnorm=histnorm,x_dTick=x_dTick,y_dTick=y_dTick)
-		hists.append(EPHist)
+	for uChr in chrsList:
+		if(uChr in uniqVals):
+			data = df[colName][df.iloc[:,chrCol]==uChr]
+			EPHist = EP.hist(data,title=uChr,xlabel=xlabel,minBin=minBin,maxBin=maxBin,binSize=binSize,ylabel=ylabel,color='#1ad1ff',histnorm=histnorm,x_dTick=x_dTick,y_dTick=y_dTick)
+			hists.append(EPHist)
 	
 	#make plot
 	EP.plotAll(hists,numCols=5,title=title,chrPacked=True)
 
 def chrQQ(df,chrCol,colName,sparams=(),dist='norm',title=None):
+
+	#chrs
+	chrsList = list()
+	for i in range(1,23):
+		chrsList.append('chr'+str(i))
+	chrsList.append('chrX')
+	chrsList.append('chrY')
 
 	#extract unique chr values
 	uniqVals = df.iloc[:,chrCol].unique()
@@ -127,14 +142,15 @@ def chrQQ(df,chrCol,colName,sparams=(),dist='norm',title=None):
 	plots = list()
 	panels = list()
 	panelIndex=1
-	for u in uniqVals:
-		data = df[colName][df.iloc[:,chrCol]==u].values
-		qq = qqplot(data,sparams=sparams,dist=dist,title=u)
-		plots.append(qq[0])
-		plots.append(qq[1])
-		panels.append(panelIndex)
-		panels.append(panelIndex)
-		panelIndex = panelIndex + 1	
+	for uChr in chrsList:
+		if(uChr in uniqVals):
+			data = df[colName][df.iloc[:,chrCol]==uChr].values
+			qq = qqplot(data,sparams=sparams,dist=dist,title=uChr)
+			plots.append(qq[0])
+			plots.append(qq[1])
+			panels.append(panelIndex)
+			panels.append(panelIndex)
+			panelIndex = panelIndex + 1	
 
 	#make plot
 	EP.plotAll(plots,panels=panels,numCols=5,height=1000,title=title,chrPacked=True)
