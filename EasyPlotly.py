@@ -156,7 +156,7 @@ def extractPanelTitlePositions(fig):
 	titleAnnotations = list(fig['layout']['annotations'])
 	return {t['text']: (t['x'],t['y']) for t in titleAnnotations}
 
-def plotAll(plots,panels=None,height=None,width=None,withhold=False,numCols=2,title=None,showLegend=False,chrPacked=False):
+def plotAll(plots,panels=None,height=None,width=None,withhold=False,numCols=2,title=None,showLegend=False,chrPacked=False,outFile=None):
 
 	#compute num panels needed to display everything
 	if(panels==None):
@@ -260,3 +260,5 @@ def plotAll(plots,panels=None,height=None,width=None,withhold=False,numCols=2,ti
 		return fig
 	else:
 		plotly.offline.iplot(fig,filename='Subplot')
+		if(outFile!=None):
+			plotly.io.write_image(fig,file=outFile)

@@ -22,7 +22,7 @@ def manhattanPlot(df,posColName,pvalueColName,title=None,height=None):
 		runningPos = runningPos+maxPos
 	EP.plotAll(h,panels=np.ones((len(h),),dtype=int).tolist(),numCols=1,showLegend=True,height=height)
 
-def chrRollingMedian(chrPosDF,chrValDF,rollwinsize,ylabel=None,title=None,withhold=False,ylim=None):
+def chrRollingMedian(chrPosDF,chrValDF,rollwinsize,ylabel=None,title=None,withhold=False,xlim=None,ylim=None):
 
 	#plot
 	x=chrPosDF.values
@@ -192,7 +192,7 @@ def roc(preds,gt,panel=1,names=None,title=None,xScale=None,yScale=None):
 	return (plots,panels)
 
 def ecdf(data,minBin,maxBin,binSize,title=None,xlabel=None,norm=False,name=None,xScale=None,yScale=None):
-	counts, bin_edges = np.histogram(data, bins=np.arange(minBin,maxBin,binSize))
+	counts, bin_edges = np.histogram(data, bins=np.arange(minBin,maxBin+binSize,binSize))
 	countsSum = np.sum(counts)
 	counts = counts / countsSum
 	cdf = np.cumsum(counts)
@@ -207,7 +207,7 @@ def ecdf(data,minBin,maxBin,binSize,title=None,xlabel=None,norm=False,name=None,
 	return cdfLine
 
 def rcdf(data,minBin,maxBin,binSize,title=None,xlabel=None,ylabel=None,norm=False,name=None,xScale=None,yScale=None):
-	counts, bin_edges = np.histogram(data, bins=np.arange(minBin,maxBin,binSize))
+	counts, bin_edges = np.histogram(data, bins=np.arange(minBin,maxBin+binSize,binSize))
 	countsSum = np.sum(counts)
 	counts = counts / countsSum
 	cdf = np.cumsum(counts)
