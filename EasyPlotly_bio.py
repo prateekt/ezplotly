@@ -126,7 +126,7 @@ def chrHist(df,chrCol,colName,minBin=None,maxBin=None,binSize=None,title=None,xl
 	#make plot
 	EP.plotAll(hists,numCols=5,title=title,chrPacked=True)
 
-def chrQQ(df,chrCol,colName,sparams=(),dist='norm',title=None):
+def chrQQ(df,chrCol,colName,sparams=(),dist='norm',title=None,outFile=None):
 
 	#chrs
 	chrsList = list()
@@ -153,7 +153,7 @@ def chrQQ(df,chrCol,colName,sparams=(),dist='norm',title=None):
 			panelIndex = panelIndex + 1	
 
 	#make plot
-	EP.plotAll(plots,panels=panels,numCols=5,height=1000,title=title,chrPacked=True)
+	EP.plotAll(plots,panels=panels,numCols=5,height=1000,title=title,chrPacked=True,outFile=outFile)
 
 def qqplot(data,sparams=(),dist='norm',title=None,name=None,markerColor='blue',lineColor='red'):
 	qq = sc.probplot(data,dist=dist,sparams=sparams)
