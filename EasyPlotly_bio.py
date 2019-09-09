@@ -185,7 +185,7 @@ def roc(preds,gt,panel=1,names=None,title=None,xScale=None,yScale=None):
 		name='AUC='+str(AUC)
 		if(names!=None):
 			name = names[i] + '('+'AUC='+str(AUC)+')'
-		p = EP.line(x=fpr,y=tpr,width=2,name=name,xlim=[0,1.0],ylim=[0,1.05],xScale=xScale,yScale=yScale,x_dTick=0.1,y_dTick=0.1)
+		p = EP.line(x=fpr,y=tpr,width=2,name=name,xlim=[0,1.0],ylim=[0,1.01],xScale=xScale,yScale=yScale,x_dTick=0.1,y_dTick=0.1)
 		plots.append(p)
 		panels.append(panel)
 
