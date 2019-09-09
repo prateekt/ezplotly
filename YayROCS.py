@@ -45,7 +45,7 @@ def roc(pred,gt):
 		cnt = cnt + 1
 
 	#resize and return
-	cnt = cnt - 1
+#	cnt = cnt - 1
 	TPR = TPR[0:cnt]
 	FPR = FPR[0:cnt]
 	return(FPR,TPR)
