@@ -8,7 +8,7 @@ def hist(data,minBin=None,maxBin=None,binSize=None,histnorm=None,title=None,name
 
 	#plot type
 	plotType='histogram'
-	if(ylabel==None):
+	if(ylabel is None):
 		if(histnorm=='probability'):
 			ylabel = 'Probability'
 		else:
@@ -17,7 +17,7 @@ def hist(data,minBin=None,maxBin=None,binSize=None,histnorm=None,title=None,name
 			ylabel = 'log ' + ylabel
 
 	#xbin properties
-	if(minBin==None or maxBin==None or binSize==None):
+	if(minBin is None or maxBin is None or binSize is None):
 		xlim=None
 		ylim=None
 		xbins=None
@@ -136,7 +136,7 @@ def heatmap(z,xlabels=None,ylabels=None,title=None,xlabel=None,ylabel=None,name=
 	plotType = 'heatmap'
 
 	#color scale
-	if(cScale==None):
+	if(cScale is None):
 		zmin=None
 		zmax=None
 	else:
@@ -156,10 +156,10 @@ def extractPanelTitlePositions(fig):
 	titleAnnotations = list(fig['layout']['annotations'])
 	return {t['text']: (t['x'],t['y']) for t in titleAnnotations}
 
-def plotAll(plots,panels=None,height=None,width=None,withhold=False,numCols=2,title=None,showLegend=False,chrPacked=False,outFile=None):
+def plotAll(plots,panels=None,height=None,width=None,withhold=False,numCols=1,title=None,showLegend=False,chrPacked=False,outFile=None):
 
 	#compute num panels needed to display everything
-	if(panels==None):
+	if(panels is None):
 		numPanels = len(plots)
 		panels = range(1,len(plots)+1)
 	else:
@@ -167,12 +167,12 @@ def plotAll(plots,panels=None,height=None,width=None,withhold=False,numCols=2,ti
 
 	#determine layout of Nx2 grid and adjust sizing
 	numRows = int(np.ceil(numPanels/numCols))
-	if(height==None):
+	if(height is None):
 		if(chrPacked):
 			height = numRows*200
 		else:
 			height = numRows*300
-	if(width==None):
+	if(width is None):
 		if(chrPacked):
 			width = numCols*200
 		else:

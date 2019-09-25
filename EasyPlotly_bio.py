@@ -97,7 +97,7 @@ def chrCountDistr(boolVals,chrDF,title=None,withhold=False):
 	else:
 		EP.plotAll([barPlot])
 
-def chrHist(df,chrCol,colName,minBin=None,maxBin=None,binSize=None,title=None,xlabel=None,ylabel=None,histnorm=None,x_dTick=None,y_dTick=None):
+def chrHist(df,chrCol,colName,minBin=None,maxBin=None,binSize=None,title=None,xlabel=None,ylabel=None,histnorm=None,x_dTick=None,y_dTick=None,outFile=None):
 	
 	#labels
 	if(xlabel==None):
@@ -124,7 +124,7 @@ def chrHist(df,chrCol,colName,minBin=None,maxBin=None,binSize=None,title=None,xl
 			hists.append(EPHist)
 	
 	#make plot
-	EP.plotAll(hists,numCols=5,title=title,chrPacked=True)
+	EP.plotAll(hists,numCols=5,title=title,chrPacked=True,outFile=outFile)
 
 def chrQQ(df,chrCol,colName,sparams=(),dist='norm',title=None,outFile=None):
 
@@ -192,41 +192,41 @@ def roc(preds,gt,panel=1,names=None,title=None,xScale=None,yScale=None):
 	#return
 	return (plots,panels)
 
-def ecdf(data,minBin,maxBin,binSize,title=None,xlabel=None,norm=False,name=None,xScale=None,yScale=None):
+def ecdf(data,minBin,maxBin,binSize,title=None,xlabel=None,ylabel=None,norm=False,name=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None):
 	counts, bin_edges = np.histogram(data, bins=np.arange(minBin,maxBin+binSize,binSize))
 	countsSum = np.sum(counts)
 	counts = counts / countsSum
 	cdf = np.cumsum(counts)
 	if(not norm):
-		if(ylabel==None):
+		if(ylabel is None):
 			ylabel = 'Cum Freq'
-		cdfLine = EP.line(x=bin_edges[1:],y=countsSum*cdf,title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin],name=name,xScale=xScale,yScale=yScale)
+		cdfLine = EP.line(x=bin_edges[1:],y=countsSum*cdf,title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin],name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick)
 	else:
-		if(ylabel==None):
+		if(ylabel is None):
 			ylabel = 'CDF'
-		cdfLine = EP.line(x=bin_edges[1:],y=cdf,title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin],ylim=[0,1.0],name=name,xScale=xScale,yScale=yScale)
+		cdfLine = EP.line(x=bin_edges[1:],y=cdf,title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin],ylim=[0,1.0],name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick)
 	return cdfLine
 
-def rcdf(data,minBin,maxBin,binSize,title=None,xlabel=None,ylabel=None,norm=False,name=None,xScale=None,yScale=None):
+def rcdf(data,minBin,maxBin,binSize,title=None,xlabel=None,ylabel=None,norm=False,name=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None):
 	counts, bin_edges = np.histogram(data, bins=np.arange(minBin,maxBin+binSize,binSize))
 	countsSum = np.sum(counts)
 	counts = counts / countsSum
 	cdf = np.cumsum(counts)
 	if(not norm):
-		if(ylabel==None):
+		if(ylabel is None):
 			ylabel = 'Cum Freq'
-		cdfLine = EP.line(x=bin_edges[1:],y=np.round(countsSum*(1.0-cdf),5),title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin],name=name,xScale=xScale,yScale=yScale)
+		cdfLine = EP.line(x=bin_edges[1:],y=np.round(countsSum*(1.0-cdf),5),title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin],name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick)
 	else:
-		if(ylabel==None):
+		if(ylabel is None):
 			ylabel = 'CDF'
-		cdfLine = EP.line(x=bin_edges[1:],y=np.round(1.0-cdf,5),title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin],ylim=[0,1.0],name=name,xScale=xScale,yScale=yScale)
+		cdfLine = EP.line(x=bin_edges[1:],y=np.round(1.0-cdf,5),title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin],ylim=[0,1.0],name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick)
 	return cdfLine
 
-def corrPlot(x,y,xlabel=None,ylabel=None,title=None,name=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None):
+def corrPlot(x,y,xlabel=None,ylabel=None,title=None,name=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None,xlim=None,ylim=None):
 	corrVal = pd.core.nanops.nancorr(x,y)
-	if(name==None):
+	if(name is None):
 		name = 'corr='+str(np.round(corrVal,3))
 	else:
 		name = name + ' ('+'corr='+str(np.round(corrVal,3))+')'
-	scatterPlot = EP.scattergl(x=x,y=y,xlabel=xlabel,ylabel=ylabel,title=title,name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick)
+	scatterPlot = EP.scattergl(x=x,y=y,xlabel=xlabel,ylabel=ylabel,title=title,name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick,xlim=xlim,ylim=ylim)
 	return scatterPlot
