@@ -130,6 +130,27 @@ def violin(y,title=None,xlabel=None,ylabel=None,name=None,xlim=None,ylim=None,xS
 	#return
 	return(plotType,title,xlabel,ylabel,violinObj,xlim,ylim,xScale,yScale,x_dTick,y_dTick)
 
+
+def scatterheat(x,y,xbins,ybins,zScale='linear',xlabels=None,ylabels=None,title=None,xlabel=None,ylabel=None,name=None,xlim=None,ylim=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None,cScale=None,plot=True):
+	
+	#transform data using np histogram
+	z = np.histogram2d(x=y,y=x,bins=[ybins,xbins])[0]
+	xlabels = xbins
+	ylabels = ybins
+
+	#transform data
+	if(zScale=='log'):
+		z = np.log10(z)
+
+	#return plots
+	h = [None]*2
+	h[0] = scattergl(x,y,xlabel=xlabel,ylabel=ylabel,xlim=xlim,ylim=ylim,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick,name=name)
+	h[1] = heatmap(z=z,xlabels=xlabels,ylabels=ylabels,xlabel=xlabel,ylabel=ylabel,name=name,xlim=xlim,ylim=ylim,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick,cScale=cScale)
+	if(plot):
+		plotAll(h)
+	else:
+		return h 
+
 def heatmap(z,xlabels=None,ylabels=None,title=None,xlabel=None,ylabel=None,name=None,xlim=None,ylim=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None,cScale=None):
 	
 	#plot type
