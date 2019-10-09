@@ -214,7 +214,7 @@ def rcdf(data,minBin,maxBin,binSize,title=None,xlabel=None,ylabel=None,norm=Fals
 	cdf = np.cumsum(counts)
 	if(not norm):
 		if(ylabel is None):
-			ylabel = 'Cum Freq'
+			ylabel = 'Inverse Cum Freq'
 		cdfLine = EP.line(x=bin_edges[1:],y=np.round(countsSum*(1.0-cdf),5),title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin+binSize],name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick)
 	else:
 		if(ylabel is None):
