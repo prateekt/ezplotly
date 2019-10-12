@@ -4,7 +4,7 @@ import plotly.graph_objs as go
 import numpy as np
 import copy
 
-def hist(data,minBin=None,maxBin=None,binSize=None,histnorm=None,title=None,name=None,xlabel=None,ylabel=None,color=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None):
+def hist(data,minBin=None,maxBin=None,binSize=None,histnorm=None,title=None,name=None,xlabel=None,ylabel=None,color=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None,xlim=None,ylim=None):
 
 	#plot type
 	plotType='histogram'
@@ -18,12 +18,10 @@ def hist(data,minBin=None,maxBin=None,binSize=None,histnorm=None,title=None,name
 
 	#xbin properties
 	if(minBin is None or maxBin is None or binSize is None):
-		xlim=None
-		ylim=None
 		xbins=None
 	else:
-		xlim=[minBin,maxBin]
-		ylim=None
+		if(xlim is None):
+			xlim=[minBin,maxBin]
 		xbins=dict(start=minBin,end=maxBin,size=binSize)
 
 	#assemble marker properties
