@@ -200,11 +200,11 @@ def ecdf(data,minBin,maxBin,binSize,title=None,xlabel=None,ylabel=None,norm=Fals
 	if(not norm):
 		if(ylabel is None):
 			ylabel = 'Cum Freq'
-		cdfLine = EP.line(x=bin_edges[1:],y=countsSum*cdf,title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin],name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick)
+		cdfLine = EP.line(x=bin_edges[1:],y=countsSum*cdf,title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin+binSize],name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick)
 	else:
 		if(ylabel is None):
 			ylabel = 'CDF'
-		cdfLine = EP.line(x=bin_edges[1:],y=cdf,title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin],ylim=[0,1.0],name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick)
+		cdfLine = EP.line(x=bin_edges[1:],y=cdf,title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin+binSize],ylim=[0,1.0],name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick)
 	return cdfLine
 
 def rcdf(data,minBin,maxBin,binSize,title=None,xlabel=None,ylabel=None,norm=False,name=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None):
@@ -214,12 +214,12 @@ def rcdf(data,minBin,maxBin,binSize,title=None,xlabel=None,ylabel=None,norm=Fals
 	cdf = np.cumsum(counts)
 	if(not norm):
 		if(ylabel is None):
-			ylabel = 'Cum Freq'
-		cdfLine = EP.line(x=bin_edges[1:],y=np.round(countsSum*(1.0-cdf),5),title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin],name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick)
+			ylabel = 'Inverse Cum Freq'
+		cdfLine = EP.line(x=bin_edges[1:],y=np.round(countsSum*(1.0-cdf),5),title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin+binSize],name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick)
 	else:
 		if(ylabel is None):
 			ylabel = 'CDF'
-		cdfLine = EP.line(x=bin_edges[1:],y=np.round(1.0-cdf,5),title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin],ylim=[0,1.0],name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick)
+		cdfLine = EP.line(x=bin_edges[1:],y=np.round(1.0-cdf,5),title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin+binSize],ylim=[0,1.0],name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick)
 	return cdfLine
 
 def corrPlot(x,y,xlabel=None,ylabel=None,title=None,name=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None,xlim=None,ylim=None):
