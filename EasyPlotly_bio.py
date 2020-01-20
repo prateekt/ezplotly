@@ -5,166 +5,166 @@ import scipy.stats as sc
 import numpy as np
 import sklearn.metrics
 
-def manhattanPlot(df,posColName,pvalueColName,title=None,height=None):
+def manhattan_plot(df,pos_col_name,pvalue_col_name,title=None,height=None):
 
 	#plot
-	runningPos=0
+	running_pos=0
 	cnt=0
 	h = [None]*22
 	for chrs in range(1,23):
-		chrName = 'chr'+str(chrs)
-		chrDF = df[df.Chr==chrName]
-		maxPos = np.max(chrDF[posColName].values)
-		ptsX = chrDF[posColName].values + runningPos
-		ptsY = -1*np.log10(chrDF[pvalueColName].values)
-		h[chrs-1] = EP.scattergl(ptsX,ptsY,name=chrName,xlabel='Chromosome',ylabel='-log10(p)',title=title,markerSize=3)
+		chr_name = 'chr'+str(chrs)
+		chr_df = df[df.Chr==chrName]
+		max_pos = np.max(chr_df[pos_col_name].values)
+		pts_x = chrDF[pos_col_name].values + running_pos
+		pts_y = -1*np.log10(chr_df[pvalue_col_name].values)
+		h[chrs-1] = EP.scattergl(pts_x,pts_y,name=chr_name,xlabel='Chromosome',ylabel='-log10(p)',title=title,marker_size=3)
 		cnt = cnt + len(chrDF)
-		runningPos = runningPos+maxPos
-	EP.plotAll(h,panels=np.ones((len(h),),dtype=int).tolist(),numCols=1,showLegend=True,height=height)
+		running_pos = running_pos+max_pos
+	EP.plot_all(h,panels=np.ones((len(h),),dtype=int).tolist(),numcols=1,showlegend=True,height=height)
 
-def chrRollingMedian(chrPosDF,chrValDF,rollwinsize,ylabel=None,title=None,withhold=False,xlim=None,ylim=None):
+def chr_rolling_median(chr_pos_df,chr_val_df,rollwinsize,ylabel=None,title=None,withhold=False,xlim=None,ylim=None):
 
 	#plot
-	x=chrPosDF.values
-	y=chrValDF.rolling(rollwinsize).median()
-	linePlot = EP.line(x=x,y=y,title=title,xlabel='Chr Position',ylabel=ylabel,ylim=ylim)
-	if(withhold):
-		return linePlot
+	x=chr_pos_df.values
+	y=chr_val_df.rolling(rollwinsize).median()
+	line_plot = EP.line(x=x,y=y,title=title,xlabel='Chr Position',ylabel=ylabel,ylim=ylim)
+	if withhold:
+		return line_plot
 	else:
-		EP.plotAll([linePlot])
+		EP.plot_all([linePlot])
 
-def chrCount(boolVals,chrDF,title=None,withhold=False):
+def chr_count(bool_vals,chr_df,title=None,withhold=False):
 
 	#extract unique chr vals
-	uniqVals = chrDF.unique()
+	uniq_vals = chr_df.unique()
 
 	#make chromosome-level counts
-	counts = np.zeros((len(uniqVals),))
+	counts = np.zeros((len(uniq_vals),))
 	cnt=0
-	for u in uniqVals:
-		counts[cnt] = np.sum(boolVals[chrDF==u])
+	for u in uniq_vals:
+		counts[cnt] = np.sum(bool_vals[chr_df==u])
 		cnt = cnt + 1
 	
 	#plot
-	barPlot = EP.bar(counts,x=uniqVals,title=title,xlabel='Chromosome',ylabel='Count')
-	if(withhold):
-		return barPlot
+	bar_plot = EP.bar(counts,x=uniq_vals,title=title,xlabel='Chromosome',ylabel='Count')
+	if withhold:
+		return bar_plot
 	else:
-		EP.plotAll([barPlot])
+		EP.plot_all([bar_plot])
 
-def chrDistr(data,chrDF,distrName,title=None,withhold=False):
+def chr_distr(data,chr_df,distr_name,title=None,withhold=False):
 
 	#extract unique chr vals
-	uniqVals = chrDF.unique()
+	uniq_vals = chr_df.unique()
 
 	#make chromosome-level counts
-	pVals = np.zeros((len(uniqVals),))
+	pvals = np.zeros((len(uniq_vals),))
 	cnt=0
-	for u in uniqVals:
-		chrDat = data[chrDF==u]
-		res= sc.kstest(chrDat,distrName)
-		pVals[cnt]  = res[1]
+	for u in uniq_vals:
+		chr_dat = data[chr_df==u]
+		res= sc.kstest(chr_dat,distr_name)
+		pvals[cnt]  = res[1]
 		cnt = cnt + 1
 	
 	#plot
-	barPlot = EP.bar(pVals,x=uniqVals,title=title,xlabel='Chromosome',ylabel='P-value (Null: Data is '+distrName+')',ylim=[0,1])
-	if(withhold):
+	bar_plot = EP.bar(pvals,x=uniq_vals,title=title,xlabel='Chromosome',ylabel='P-value (Null: Data is '+distr_name+')',ylim=[0,1])
+	if withhold:
 		return barPlot
 	else:
-		EP.plotAll([barPlot])
+		EP.plot_all([bar_plot])
 
-def chrCountDistr(boolVals,chrDF,title=None,withhold=False):
+def chr_count_distr(bool_vals,chr_df,title=None,withhold=False):
 	#bool vals = N pos x M replicates
 
 	#extract unique chr vals
-	uniqVals = chrDF.unique()
+	uniq_vals = chr_df.unique()
 
 	#make chromosome-level counts
-	means = np.zeros((len(uniqVals),))
-	stds = np.zeros((len(uniqVals),))
+	means = np.zeros((len(uniq_vals),))
+	stds = np.zeros((len(uniq_vals),))
 	cnt=0
-	for u in uniqVals:
-		reps = boolVals[chrDF==u]
+	for u in uniq_vals:
+		reps = bool_vals[chr_df==u]
 		sums = np.sum(reps,axis=0)
 		means[cnt] = np.mean(sums)
 		stds[cnt] = np.std(sums)
 		cnt = cnt + 1
 	
 	#plot
-	barPlot = EP.bar(y=means,x=uniqVals,error_y=stds,title=title,xlabel='Chromosome',ylabel='Count')
-	if(withhold):
-		return barPlot
+	bar_plot = EP.bar(y=means,x=uniq_vals,error_y=stds,title=title,xlabel='Chromosome',ylabel='Count')
+	if withhold:
+		return bar_plot
 	else:
-		EP.plotAll([barPlot])
+		EP.plot_all([bar_plot])
 
-def chrHist(df,chrCol,colName,minBin=None,maxBin=None,binSize=None,title=None,xlabel=None,ylabel=None,histnorm=None,x_dTick=None,y_dTick=None,outFile=None):
+def chr_hist(df,chr_col,col_name,minbin=None,maxbin=None,binsize=None,title=None,xlabel=None,ylabel=None,histnorm=None,x_dtick=None,y_dtick=None,outfile=None):
 	
 	#labels
-	if(xlabel==None):
+	if xlabel is None:
 		xlabel = colName
-	if(ylabel==None):
+	if ylabel is None:
 		ylabel = 'Count'
 
 	#chrs
-	chrsList = list()
+	chrs_list = list()
 	for i in range(1,23):
-		chrsList.append('chr'+str(i))
-	chrsList.append('chrX')
-	chrsList.append('chrY')
+		chrs_list.append('chr'+str(i))
+	chrs_list.append('chrX')
+	chrs_list.append('chrY')
 
 	#extract unique chr values
-	uniqVals = df.iloc[:,chrCol].unique()
+	uniq_vals = df.iloc[:,chr_col].unique()
 
 	#make chromosome level hists
 	hists = list()
-	for uChr in chrsList:
-		if(uChr in uniqVals):
-			data = df[colName][df.iloc[:,chrCol]==uChr]
-			EPHist = EP.hist(data,title=uChr,xlabel=xlabel,minBin=minBin,maxBin=maxBin,binSize=binSize,ylabel=ylabel,color='#1ad1ff',histnorm=histnorm,x_dTick=x_dTick,y_dTick=y_dTick)
-			hists.append(EPHist)
+	for u_chr in chrs_list:
+		if u_chr in uniq_vals:
+			data = df[col_name][df.iloc[:,chr_col]==u_chr]
+			EP_hist = EP.hist(data,title=u_chr,xlabel=xlabel,minbin=minbin,maxbin=maxbin,binsize=binsize,ylabel=ylabel,color='#1ad1ff',histnorm=histnorm,x_dTick=x_dtick,y_dTick=y_dtick)
+			hists.append(EP_hist)
 	
 	#make plot
-	EP.plotAll(hists,numCols=5,title=title,chrPacked=True,outFile=outFile)
+	EP.plot_all(hists,numcols=5,title=title,chrpacked=True,outfile=outFile)
 
-def chrQQ(df,chrCol,colName,sparams=(),dist='norm',title=None,outFile=None):
+def chr_qq(df,chr_col,col_name,sparams=(),dist='norm',title=None,outfile=None):
 
 	#chrs
-	chrsList = list()
+	chrs_list = list()
 	for i in range(1,23):
-		chrsList.append('chr'+str(i))
-	chrsList.append('chrX')
-	chrsList.append('chrY')
+		chrs_list.append('chr'+str(i))
+	chrs_list.append('chrX')
+	chrs_list.append('chrY')
 
 	#extract unique chr values
-	uniqVals = df.iloc[:,chrCol].unique()
+	uniq_vals = df.iloc[:,chr_col].unique()
 
 	#make chromosome level qq-plots
 	plots = list()
 	panels = list()
-	panelIndex=1
-	for uChr in chrsList:
-		if(uChr in uniqVals):
-			data = df[colName][df.iloc[:,chrCol]==uChr].values
-			qq = qqplot(data,sparams=sparams,dist=dist,title=uChr)
+	panel_index=1
+	for u_chr in chrs_list:
+		if u_chr in uniq_vals:
+			data = df[col_name][df.iloc[:,chr_col]==u_chr].values
+			qq = qqplot(data,sparams=sparams,dist=dist,title=u_chr)
 			plots.append(qq[0])
 			plots.append(qq[1])
-			panels.append(panelIndex)
-			panels.append(panelIndex)
-			panelIndex = panelIndex + 1	
+			panels.append(panel_index)
+			panels.append(panel_index)
+			panel_index = panel_index + 1
 
 	#make plot
-	EP.plotAll(plots,panels=panels,numCols=5,height=1000,title=title,chrPacked=True,outFile=outFile)
+	EP.plot_all(plots,panels=panels,numcols=5,height=1000,title=title,chrpacked=True,outfile=outFile)
 
-def qqplot(data,sparams=(),dist='norm',title=None,name=None,markerColor='blue',lineColor='red'):
+def qqplot(data,sparams=(),dist='norm',title=None,name=None,marker_color='blue',line_color='red'):
 	qq = sc.probplot(data,dist=dist,sparams=sparams)
 	x=np.array([qq[0][0][0],qq[0][0][-1]])
-	ptsScatter = EP.scattergl(x=qq[0][0],y=qq[0][1],title=title,xlabel='Expected',ylabel='Observed',markerSize=5,markerColor=markerColor,name=name)
-	if(name==None):
+	pts_scatter = EP.scattergl(x=qq[0][0],y=qq[0][1],title=title,xlabel='Expected',ylabel='Observed',markersize=5,marker_color=marker_color,name=name)
+	if name is None:
 		name = ''	
-	linePlot = EP.line(x=x,y=qq[1][1] + qq[1][0]*x,width=3,color=lineColor,title=title,name=(name + ' (distribution='+dist+')'))
-	return (ptsScatter,linePlot)
+	line_plot = EP.line(x=x,y=qq[1][1] + qq[1][0]*x,width=3,color=lineColor,title=title,name=(name + ' (distribution='+dist+')'))
+	return pts_scatter, line_plot
 
-def roc(preds,gt,panel=1,names=None,title=None,xScale=None,yScale=None):
+def roc(preds,gt,panel=1,names=None,title=None,xscale=None,yscale=None):
 	#preds = N-ROC x L
 	#gt = (L,)
 
@@ -173,7 +173,7 @@ def roc(preds,gt,panel=1,names=None,title=None,xScale=None,yScale=None):
 	panels = list()
 
 	#add chance curve
-	p = EP.line(x=np.arange(0.0,1.01,0.01),y=np.arange(0.0,1.01,0.01),width=2,name='Chance Curve',color='black',xlabel='False Positive Rate',ylabel='True Positive Rate',title=title,xlim=[0,1.01],ylim=[0,1.01],xScale=xScale,yScale=yScale,x_dTick=0.1,y_dTick=0.1)
+	p = EP.line(x=np.arange(0.0,1.01,0.01),y=np.arange(0.0,1.01,0.01),width=2,name='Chance Curve',color='black',xlabel='False Positive Rate',ylabel='True Positive Rate',title=title,xlim=[0,1.01],ylim=[0,1.01],xscale=xscale,yscale=yscale,x_dtick=0.1,y_dtick=0.1)
 	plots.append(p)
 	panels.append(panel)
 
@@ -181,52 +181,52 @@ def roc(preds,gt,panel=1,names=None,title=None,xScale=None,yScale=None):
 	for i in range(0,preds.shape[0]):
 		fpr,tpr = YP.roc(preds[i,:],gt)
 #		fpr,tpr,_ = sklearn.metrics.roc_curve(gt,preds[:,i])
-		AUC = np.round(YP.auc(fpr,tpr),3)
-		name='AUC='+str(AUC)
-		if(names!=None):
-			name = names[i] + '('+'AUC='+str(AUC)+')'
-		p = EP.line(x=fpr,y=tpr,width=2,name=name,xlim=[0,1.0],ylim=[0,1.01],xScale=xScale,yScale=yScale,x_dTick=0.1,y_dTick=0.1)
+		auc = np.round(YP.auc(fpr,tpr),3)
+		name='AUC='+str(auc)
+		if names is not None:
+			name = names[i] + '('+'AUC='+str(auc)+')'
+		p = EP.line(x=fpr,y=tpr,width=2,name=name,xlim=[0,1.0],ylim=[0,1.01],xscale=xscale,yscale=yscale,x_dtick=0.1,y_dtick=0.1)
 		plots.append(p)
 		panels.append(panel)
 
 	#return
-	return (plots,panels)
+	return plots, panels
 
-def ecdf(data,minBin,maxBin,binSize,title=None,xlabel=None,ylabel=None,norm=False,name=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None):
-	counts, bin_edges = np.histogram(data, bins=np.arange(minBin,maxBin+binSize,binSize))
-	countsSum = np.sum(counts)
-	counts = counts / countsSum
+def ecdf(data,minbin,maxbin,binsize,title=None,xlabel=None,ylabel=None,norm=False,name=None,xscale=None,yscale=None,x_dtick=None,y_dtick=None):
+	counts, bin_edges = np.histogram(data, bins=np.arange(minbin,maxbin+binsize,binsize))
+	counts_sum = np.sum(counts)
+	counts = counts / counts_sum
 	cdf = np.cumsum(counts)
-	if(not norm):
-		if(ylabel is None):
+	if not norm:
+		if ylabel is None:
 			ylabel = 'Cum Freq'
-		cdfLine = EP.line(x=bin_edges[1:],y=countsSum*cdf,title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin+binSize],name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick)
+		cdf_line = EP.line(x=bin_edges[1:],y=countsSum*cdf,title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minbin,maxbin+binsize],name=name,xscale=xscale,yscale=yscale,x_dtick=x_dTick,y_dtick=y_dTick)
 	else:
-		if(ylabel is None):
+		if ylabel is None:
 			ylabel = 'CDF'
-		cdfLine = EP.line(x=bin_edges[1:],y=cdf,title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin+binSize],ylim=[0,1.0],name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick)
-	return cdfLine
+		cdf_line = EP.line(x=bin_edges[1:],y=cdf,title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minbin,maxbin+binsize],ylim=[0,1.0],name=name,xscale=xScale,yscale=yscale,x_dtick=x_dtick,y_dtick=y_dtick)
+	return cdf_line
 
-def rcdf(data,minBin,maxBin,binSize,title=None,xlabel=None,ylabel=None,norm=False,name=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None):
-	counts, bin_edges = np.histogram(data, bins=np.arange(minBin,maxBin+binSize,binSize))
-	countsSum = np.sum(counts)
-	counts = counts / countsSum
+def rcdf(data,minbin,maxbin,binsize,title=None,xlabel=None,ylabel=None,norm=False,name=None,xscale=None,yscale=None,x_dtick=None,y_dtick=None):
+	counts, bin_edges = np.histogram(data, bins=np.arange(minbin,maxbin+binsize,binsize))
+	counts_sum = np.sum(counts)
+	counts = counts / counts_sum
 	cdf = np.cumsum(counts)
-	if(not norm):
-		if(ylabel is None):
+	if not norm:
+		if ylabel is None:
 			ylabel = 'Inverse Cum Freq'
-		cdfLine = EP.line(x=bin_edges[1:],y=np.round(countsSum*(1.0-cdf),5),title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin+binSize],name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick)
+		cdf_line = EP.line(x=bin_edges[1:],y=np.round(counts_sum*(1.0-cdf),5),title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minbin,maxbin+binsize],name=name,xscale=xscale,yscale=yscale,x_dtick=x_dtick,y_dtick=y_dtick)
 	else:
-		if(ylabel is None):
+		if ylabel is None:
 			ylabel = 'CDF'
-		cdfLine = EP.line(x=bin_edges[1:],y=np.round(1.0-cdf,5),title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minBin,maxBin+binSize],ylim=[0,1.0],name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick)
-	return cdfLine
+		cdf_line = EP.line(x=bin_edges[1:],y=np.round(1.0-cdf,5),title=title,xlabel=xlabel,ylabel=ylabel,xlim=[minbin,maxbin+binsize],ylim=[0,1.0],name=name,xscale=xscale,yscale=yscale,x_dtick=x_dtick,y_dtick=y_dtick)
+	return cdf_line
 
-def corrPlot(x,y,xlabel=None,ylabel=None,title=None,name=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None,xlim=None,ylim=None):
-	corrVal = pd.core.nanops.nancorr(x,y)
-	if(name is None):
-		name = 'corr='+str(np.round(corrVal,3))
+def corr_plot(x,y,xlabel=None,ylabel=None,title=None,name=None,xscale=None,yscale=None,x_dtick=None,y_dtick=None,xlim=None,ylim=None):
+	corr_val = pd.core.nanops.nancorr(x,y)
+	if name is None:
+		name = 'corr='+str(np.round(corr_val,3))
 	else:
-		name = name + ' ('+'corr='+str(np.round(corrVal,3))+')'
-	scatterPlot = EP.scattergl(x=x,y=y,xlabel=xlabel,ylabel=ylabel,title=title,name=name,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick,xlim=xlim,ylim=ylim)
-	return scatterPlot
+		name = name + ' ('+'corr='+str(np.round(corr_val,3))+')'
+	scatter_plot = EP.scattergl(x=x,y=y,xlabel=xlabel,ylabel=ylabel,title=title,name=name,xscale=xscale,yscale=yscale,x_dtick=x_dtick,y_dtick=y_dtick,xlim=xlim,ylim=ylim)
+	return scatter_plot

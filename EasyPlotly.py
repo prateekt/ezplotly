@@ -4,33 +4,33 @@ import plotly.graph_objs as go
 import numpy as np
 import copy
 
-def hist(data,minBin=None,maxBin=None,binSize=None,histnorm=None,title=None,name=None,xlabel=None,ylabel=None,color=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None,xlim=None,ylim=None):
+def hist(data,min_bin=None,max_bin=None,bin_size=None,histnorm=None,title=None,name=None,xlabel=None,ylabel=None,color=None,xscale=None,yscale=None,x_dtick=None,y_dtick=None,xlim=None,ylim=None):
 
 	#plot type
-	plotType='histogram'
-	if(ylabel is None):
-		if(histnorm=='probability'):
+	plot_type='histogram'
+	if ylabel is None:
+		if histnorm== 'probability':
 			ylabel = 'Probability'
 		else:
 			ylabel = 'Frequency'
-		if(yScale=='log'):
+		if yscale== 'log':
 			ylabel = 'log ' + ylabel
 
 	#xbin properties
-	if(minBin is None or maxBin is None or binSize is None):
+	if min_bin is None or max_bin is None or bin_size is None:
 		xbins=None
 	else:
-		if(xlim is None):
-			xlim=[minBin,maxBin]
-		xbins=dict(start=minBin,end=maxBin,size=binSize)
+		if xlim is None:
+			xlim = [min_bin,max_bin]
+		xbins = dict(start=min_bin,end=max_bin,size=bin_size)
 
 	#assemble marker properties
 	marker = dict()
-	if(color!=None):
+	if color is not None:
 		marker['color']=color
 
 	#assemble hist object
-	histObj = go.Histogram(
+	hist_obj = go.Histogram(
 		x=data,
 		name=name,
 		xbins=xbins,
@@ -39,19 +39,19 @@ def hist(data,minBin=None,maxBin=None,binSize=None,histnorm=None,title=None,name
 	)
 
 	#return
-	return (plotType,title,xlabel,ylabel,histObj,xlim,ylim,xScale,yScale,x_dTick,y_dTick)
+	return plot_type, title, xlabel, ylabel, hist_obj, xlim, ylim, xscale, yscale, x_dtick, y_dtick
 
-def bar(y,x=(),error_y=None,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,name=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None):
+def bar(y,x=(),error_y=None,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,name=None,xscale=None,yscale=None,x_dtick=None,y_dtick=None):
 
 	#plot type
-	plotType='bar'
+	plot_type='bar'
 
 	#define x
-	if(len(x)==0):
+	if len(x)==0:
 		x = [a for a in range(0,len(y))]
 
 	#assemble bar object
-	barObj = go.Bar(
+	bar_obj = go.Bar(
 		name=name,
 		x=x,
 		y=y,
@@ -63,48 +63,48 @@ def bar(y,x=(),error_y=None,title=None,xlabel=None,ylabel=None,xlim=None,ylim=No
 	)
 
 	#return
-	return (plotType,title,xlabel,ylabel,barObj,xlim,ylim,xScale,yScale,x_dTick,y_dTick)
+	return plot_type, title, xlabel, ylabel, bar_obj, xlim, ylim, xscale, yscale, x_dtick, y_dtick
 
-def scattergl(x,y,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,markerSize=None,markerColor=None,name=None,pointAnno=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None):
+def scattergl(x,y,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,marker_size=None,marker_color=None,name=None,point_anno=None,xscale=None,yscale=None,x_dtick=None,y_dtick=None):
 
 	#plot type
-	plotType='scattergl'
+	plot_type='scattergl'
 
 	#assemble marker information
 	marker = dict()
-	if(markerSize!=None):
-		marker['size'] = markerSize
-	if(markerColor!=None):
-		marker['color'] = markerColor
+	if marker_size is not None:
+		marker['size'] = marker_size
+	if marker_color is not None:
+		marker['color'] = marker_color
 
 	#make scatter gl object
-	scatterObj = go.Scattergl(
+	scatter_obj = go.Scattergl(
 		name=name,
 		x=x,
 		y=y,
 		mode='markers',
 		visible=True,
 		marker=marker,
-		text=pointAnno
+		text=point_anno
 	)
 	
 	#return
-	return(plotType,title,xlabel,ylabel,scatterObj,xlim,ylim,xScale,yScale,x_dTick,y_dTick)
+	return plot_type, title, xlabel, ylabel, scatter_obj, xlim, ylim, xscale, yscale, x_dtick, y_dtick
 
-def line(x,y,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,width=None,color=None,pointAnno=None,name=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None):
+def line(x,y,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,width=None,color=None,name=None,xscale=None,yscale=None,x_dtick=None,y_dtick=None):
 
 	#plot type
-	plotType='line'
+	plot_type='line'
 
 	#assemble line information
 	line = dict()
-	if(width!=None):
+	if width is not None:
 		line['width']=width
-	if(color!=None):
+	if color is not None:
 		line['color']=color
 
 	#make scatter object
-	scatterObj = go.Scattergl(
+	scatter_obj = go.Scattergl(
 		name=name,
 		x=x,
 		y=y,
@@ -112,24 +112,24 @@ def line(x,y,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,width=None,c
 	)
 
 	#return
-	return(plotType,title,xlabel,ylabel,scatterObj,xlim,ylim,xScale,yScale,x_dTick,y_dTick)
+	return plot_type, title, xlabel, ylabel, scatter_obj, xlim, ylim, xscale, yscale, x_dtick, y_dtick
 
-def violin(y,title=None,xlabel=None,ylabel=None,name=None,xlim=None,ylim=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None):
+def violin(y,title=None,xlabel=None,ylabel=None,name=None,xlim=None,ylim=None,xscale=None,yscale=None,x_dtick=None,y_dtick=None):
 
 	#plot type
-	plotType='violin'
+	plot_type='violin'
 
 	#make violin object
-	violinObj = go.Violin(
+	violin_obj = go.Violin(
 		y=y,
 		name=name
 	)
 
 	#return
-	return(plotType,title,xlabel,ylabel,violinObj,xlim,ylim,xScale,yScale,x_dTick,y_dTick)
+	return plot_type, title, xlabel, ylabel, violin_obj, xlim, ylim, xscale, yscale, x_dtick, y_dtick
 
 
-def scatterheat(x,y,xbins,ybins,zScale='linear',xlabels=None,ylabels=None,title=None,xlabel=None,ylabel=None,name=None,xlim=None,ylim=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None,cScale=None,outFile=None,plot=True):
+def scatterheat(x,y,xbins,ybins,zscale='linear',title=None,xlabel=None,ylabel=None,name=None,xlim=None,ylim=None,xscale=None,yscale=None,x_dtick=None,y_dtick=None,cscale=None,outfile=None,plot=True):
 	
 	#transform data using np histogram
 	z = np.histogram2d(x=y,y=x,bins=[ybins,xbins])[0]
@@ -137,25 +137,25 @@ def scatterheat(x,y,xbins,ybins,zScale='linear',xlabels=None,ylabels=None,title=
 	ylabels = ybins
 
 	#transform data
-	if(zScale=='log'):
+	if zscale== 'log':
 		z = np.log10(z)
 
 	#return plots
 	h = [None]*2
-	h[0] = scattergl(x,y,xlabel=xlabel,ylabel=ylabel,xlim=xlim,ylim=ylim,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick,name=name,markerSize=1)
-	h[1] = heatmap(z=z,xlabels=xlabels,ylabels=ylabels,xlabel=xlabel,ylabel=ylabel,name=name,xlim=xlim,ylim=ylim,xScale=xScale,yScale=yScale,x_dTick=x_dTick,y_dTick=y_dTick,cScale=cScale)
-	if(plot):
-		plotAll(h,title=title,outFile=outFile)
+	h[0] = scattergl(x,y,xlabel=xlabel,ylabel=ylabel,xlim=xlim,ylim=ylim,xscale=xscale,yscale=yscale,x_dtick=x_dtick,y_dtick=y_dtick,name=name,marker_size=1)
+	h[1] = heatmap(z=z,xlabels=xlabels,ylabels=ylabels,xlabel=xlabel,ylabel=ylabel,xlim=xlim,ylim=ylim,xscale=xscale,yscale=yscale,x_dtick=x_dtick,y_dtick=y_dtick,cscale=cscale)
+	if plot:
+		plot_all(h,title=title,outFile=outfile)
 	else:
 		return h 
 
-def heatmap(z,xlabels=None,ylabels=None,title=None,xlabel=None,ylabel=None,name=None,xlim=None,ylim=None,xScale=None,yScale=None,x_dTick=None,y_dTick=None,cScale=None):
+def heatmap(z,xlabels=None,ylabels=None,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,xscale=None,yscale=None,x_dtick=None,y_dtick=None,cscale=None):
 	
 	#plot type
-	plotType = 'heatmap'
+	plot_type = 'heatmap'
 
 	#color scale
-	if(cScale is None):
+	if cscale is None:
 		zmin=None
 		zmax=None
 	else:
@@ -163,121 +163,121 @@ def heatmap(z,xlabels=None,ylabels=None,title=None,xlabel=None,ylabel=None,name=
 		zmax=cScale[1]
 
 	#make heatmap object
-	heatmapObj = go.Heatmap(z=z,x=xlabels,y=ylabels,zmin=zmin,zmax=zmax)
+	heatmap_obj = go.Heatmap(z=z,x=xlabels,y=ylabels,zmin=zmin,zmax=zmax)
 
 	#return
-	return(plotType,title,xlabel,ylabel,heatmapObj,xlim,ylim,xScale,yScale,x_dTick,y_dTick)
+	return plot_type, title, xlabel, ylabel, heatmap_obj, xlim, ylim, xscale, yscale, x_dtick, y_dtick
 
 def show(fig):
 	plotly.offline.iplot(fig,filename='Subplot')
 
-def extractPanelTitlePositions(fig):
-	titleAnnotations = list(fig['layout']['annotations'])
-	return {t['text']: (t['x'],t['y']) for t in titleAnnotations}
+def extract_panel_title_positions(fig):
+	title_annotations = list(fig['layout']['annotations'])
+	return {t['text']: (t['x'],t['y']) for t in title_annotations}
 
-def plotAll(plots,panels=None,height=None,width=None,withhold=False,numCols=1,title=None,showLegend=False,chrPacked=False,outFile=None):
+def plot_all(plots,panels=None,height=None,width=None,withhold=False,numcols=1,title=None,showlegend=False,chrpacked=False,outfile=None):
 
 	#compute num panels needed to display everything
-	if(panels is None):
-		numPanels = len(plots)
+	if panels is None:
+		num_panels = len(plots)
 		panels = range(1,len(plots)+1)
 	else:
-		numPanels= np.max(panels)
+		num_panels= np.max(panels)
 
 	#determine layout of Nx2 grid and adjust sizing
-	numRows = int(np.ceil(numPanels/numCols))
-	if(height is None):
-		if(chrPacked):
-			height = numRows*200
+	num_rows = int(np.ceil(num_panels/numcols))
+	if height is None:
+		if chrpacked:
+			height = num_rows*200
 		else:
-			height = numRows*300
-	if(width is None):
-		if(chrPacked):
-			width = numCols*200
+			height = num_rows*300
+	if width is None:
+		if chrpacked:
+			width = numcols*200
 		else:
 			width=1000
 
 	#extract panel titles
-	panelTitles = ['' for a in range(0,numPanels)]
-	for plotIndex in range(0,len(plots)):
-		p = plots[plotIndex]
-		plotTitle = p[1]
-		panelIndex = panels[plotIndex]
-		if(plotTitle!=None):
-			panelTitles[panelIndex-1] = plotTitle
+	panel_titles = ['' for a in range(0,num_panels)]
+	for plot_index in range(0,len(plots)):
+		p = plots[plot_index]
+		plot_title = p[1]
+		panel_index = panels[plot_index]
+		if plot_title is not None:
+			panel_titles[panel_index-1] = plot_title
 
 	#make overall figure
-	fig = plotly.tools.make_subplots(rows=numRows,cols=numCols,subplot_titles=panelTitles,print_grid=False)
-	titlePositions = extractPanelTitlePositions(fig)
+	fig = plotly.tools.make_subplots(rows=num_rows,cols=numcols,subplot_titles=panel_titles,print_grid=False)
+	title_positions = extract_panel_title_positions(fig)
 
 	#loop over plot generation
-	for plotIndex in range(0,len(plots)):	
+	for plot_index in range(0,len(plots)):
 
 		#property extraction	
-		panelIndex = panels[plotIndex]
-		p=plots[plotIndex]
-		plotType = p[0]
-		plotTitle = p[1]
+		panel_index = panels[plot_index]
+		p=plots[plot_index]
+		plot_type = p[0]
+		plot_title = p[1]
 		xlabel = p[2]
 		ylabel = p[3]
 		plot = p[4]
 		xlim = p[5]
 		ylim = p[6]
-		xScale = p[7]
-		yScale = p[8]
-		x_dTick = p[9]
-		y_dTick = p[10]
+		xscale = p[7]
+		yscale = p[8]
+		x_dtick = p[9]
+		y_dtick = p[10]
 
 		#row/col
-		rowIndex = int((panelIndex-1) / numCols + 1)
-		colIndex = int((panelIndex-1) % numCols + 1)
+		row_index = int((panel_index-1) / numcols + 1)
+		col_index = int((panel_index-1) % numcols + 1)
 
 		#set up axis for figure
-		fig.append_trace(plot,rowIndex,colIndex)
-		fig['layout']['xaxis'+str(panelIndex)].update(showgrid=True)
-		fig['layout']['yaxis'+str(panelIndex)].update(showgrid=True)
+		fig.append_trace(plot,row_index,col_index)
+		fig['layout']['xaxis'+str(panel_index)].update(showgrid=True)
+		fig['layout']['yaxis'+str(panel_index)].update(showgrid=True)
 
 		#redo figure axis labels for chrPacked=True
-		if(chrPacked):
-			if(colIndex!=1):
-				ylabel=None
-			if(xlabel!=None):
-				newAnno = dict(
+		if chrpacked:
+			if col_index!=1:
+				ylabel = None
+			if xlabel is not None:
+				new_anno = dict(
 					text=xlabel,
-					x=titlePositions[plotTitle][0],
+					x=title_positions[plot_title][0],
 					xanchor='center',
 					xref='paper',
-					y=-0.043+(numRows-rowIndex)*0.22,
+					y=-0.043+(num_rows-row_index)*0.22,
 					yanchor= 'bottom',
 					yref='paper',
 					showarrow=False,
 					font=dict(size=14)
 				)
-				fig['layout']['annotations'] += (newAnno,)
+				fig['layout']['annotations'] += (new_anno,)
 		
 		#set figure labels
-		if(xlabel!=None and not chrPacked):
-			fig['layout']['xaxis'+str(panelIndex)].update(title=xlabel)
-		if(ylabel!=None):
-			fig['layout']['yaxis'+str(panelIndex)].update(title=ylabel)
-		if(xScale!=None):
-			fig['layout']['xaxis'+str(panelIndex)].update(type=xScale)
-		if(yScale!=None):
-			fig['layout']['yaxis'+str(panelIndex)].update(type=yScale)
-		if(x_dTick!=None):
-			fig['layout']['xaxis'+str(panelIndex)].update(dtick=x_dTick)
-		if(y_dTick!=None):
-			fig['layout']['yaxis'+str(panelIndex)].update(dtick=y_dTick)
-		if(xlim!=None):
-			fig['layout']['xaxis'+str(panelIndex)].update(range=xlim,autorange=False,tick0=xlim[0])
-		if(ylim!=None):
-			fig['layout']['yaxis'+str(panelIndex)].update(range=ylim,autorange=False,tick0=ylim[0])
+		if xlabel is not None and not chrpacked:
+			fig['layout']['xaxis'+str(panel_index)].update(title=xlabel)
+		if ylabel is not None:
+			fig['layout']['yaxis'+str(panel_index)].update(title=ylabel)
+		if xscale is not None:
+			fig['layout']['xaxis'+str(panel_index)].update(type=xscale)
+		if yscale is not None:
+			fig['layout']['yaxis'+str(panel_index)].update(type=yscale)
+		if x_dtick is not None:
+			fig['layout']['xaxis'+str(panel_index)].update(dtick=x_dtick)
+		if y_dtick is not None:
+			fig['layout']['yaxis'+str(panel_index)].update(dtick=y_dtick)
+		if xlim is not None:
+			fig['layout']['xaxis'+str(panel_index)].update(range=xlim,autorange=False,tick0=xlim[0])
+		if ylim is not None:
+			fig['layout']['yaxis'+str(panel_index)].update(range=ylim,autorange=False,tick0=ylim[0])
 
 	#set overall layout and either withold plot or display it
-	fig['layout'].update(height=height,width=width,showlegend=showLegend,title=title)
-	if(withhold): 	#return fig (if additional custom changes need to be made)
+	fig['layout'].update(height=height,width=width,showlegend=showlegend,title=title)
+	if withhold: 	#return fig (if additional custom changes need to be made)
 		return fig
 	else:
 		plotly.offline.iplot(fig,filename='Subplot')
-		if(outFile!=None):
-			plotly.io.write_image(fig,file=outFile)
+		if outfile is not None:
+			plotly.io.write_image(fig,file=outfile)
