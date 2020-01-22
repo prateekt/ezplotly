@@ -1,4 +1,4 @@
-# EasyPlotly For Python Notebooks
+# EasyPlotly and EasyPlotly_bio For Python Notebooks
 An easy wrapper for making plotly plots in python jupyter notebooks
 
 Plotly offers interactive plots, as opposed to the static plots that most other python visualization tools provide. However, Plotly syntax can be challenging to write, whereas the other libraries are a lot easier to plot with. EasyPlotly helps bridge the gap.
