@@ -1,5 +1,9 @@
 # EasyPlotly For Python Notebooks
-An easy wrapper for making plotly plots in python notebooks
+An easy wrapper for making plotly plots in python jupyter notebooks
+
+Plotly syntax can be challenging to write. To make things simpler (and more matlab or matplotlib-like), we introduce EasyPlotly -- a wrapper on plotly that makes it easier to write. Perfect for a python Jupyter notebook environment!
+
+Example syntax:
 
 ```python
 import EasyPlotly as EP
@@ -9,4 +13,4 @@ exampleScatter = EP.scattergl(x=a,y=b,title='Test',xlabel='x',ylabel='y')
 EP.plotAll([exampleHist,exampleScatter])
 ```
 
-There's also a bioinformatics extension (EasyPlotly_bio) in the works for making common bioinformatics plots such as qqplots, chromosome rolling medians, chromsome count bar charts, and chromosome histograms.
+In the bioinformatics domain? Currently in the works is a bioinformatics extension (EasyPlotly_bio) for making common bioinformatics plots such as qqplots, chromosome rolling medians, chromsome count bar charts, and chromosome histograms.
