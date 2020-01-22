@@ -1,7 +1,9 @@
 # EasyPlotly For Python Notebooks
 An easy wrapper for making plotly plots in python jupyter notebooks
 
-Plotly syntax can be challenging to write. To make things simpler (and more matlab or matplotlib-like), we introduce EasyPlotly -- a wrapper on plotly that makes it easier to write. Perfect for a python Jupyter notebook environment!
+Plotly offers interactive plots, as opposed to the static plots that most other python visualization tools provide. However, Plotly syntax can be challenging to write, whereas the other libraries are a lot easier to plot with. EasyPlotly helps bridge the gap.
+
+To make plotling with Plotly in python simpler (and more matplotlib or matlab-like), we introduce EasyPlotly -- a wrapper on plotly that makes plotting WAY easier. Works extremely well in a python Jupyter notebook environment!
 
 Example syntax:
 
