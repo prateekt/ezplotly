@@ -142,10 +142,10 @@ def scatterheat(x,y,xbins,ybins,zscale='linear',title=None,xlabel=None,ylabel=No
 
 	#return plots
 	h = [None]*2
-	h[0] = scattergl(x,y,xlabel=xlabel,ylabel=ylabel,xlim=xlim,ylim=ylim,xscale=xscale,yscale=yscale,x_dtick=x_dtick,y_dtick=y_dtick,name=name,marker_size=1)
+	h[0] = scattergl(x,y,xlabel=xlabel,ylabel=ylabel,xlim=xlim,ylim=ylim,xscale=xscale,yscale=yscale,x_dtick=x_dtick,y_dtick=y_dtick,name=name,marker_size=5)
 	h[1] = heatmap(z=z,xlabels=xlabels,ylabels=ylabels,xlabel=xlabel,ylabel=ylabel,xlim=xlim,ylim=ylim,xscale=xscale,yscale=yscale,x_dtick=x_dtick,y_dtick=y_dtick,cscale=cscale)
 	if plot:
-		plot_all(h,title=title,outFile=outfile)
+		plot_all(h,title=title,outfile=outfile)
 	else:
 		return h 
 
