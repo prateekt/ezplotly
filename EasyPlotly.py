@@ -65,7 +65,38 @@ def bar(y,x=(),error_y=None,title=None,xlabel=None,ylabel=None,xlim=None,ylim=No
 	#return
 	return plot_type, title, xlabel, ylabel, bar_obj, xlim, ylim, xscale, yscale, x_dtick, y_dtick
 
-def scattergl(x,y,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,marker_size=None,marker_color=None,name=None,point_anno=None,xscale=None,yscale=None,x_dtick=None,y_dtick=None):
+def scatter(x,y,error_y=None,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,marker_size=None,marker_color=None,name=None,point_anno=None,xscale=None,yscale=None,x_dtick=None,y_dtick=None):
+
+	#plot type
+	plot_type='scatter'
+
+	#assemble marker information
+	marker = dict()
+	if marker_size is not None:
+		marker['size'] = marker_size
+	if marker_color is not None:
+		marker['color'] = marker_color
+
+	#make scatter gl object
+	scatter_obj = go.Scatter(
+		name=name,
+		x=x,
+		y=y,
+		mode='markers',
+		visible=True,
+		marker=marker,
+		text=point_anno,
+		error_y=dict(
+			type='data',
+			array=error_y,
+			visible=True
+		)		
+	)
+	
+	#return
+	return plot_type, title, xlabel, ylabel, scatter_obj, xlim, ylim, xscale, yscale, x_dtick, y_dtick
+
+def scattergl(x,y,error_y=None,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,marker_size=None,marker_color=None,name=None,point_anno=None,xscale=None,yscale=None,x_dtick=None,y_dtick=None):
 
 	#plot type
 	plot_type='scattergl'
@@ -85,13 +116,18 @@ def scattergl(x,y,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,marker_
 		mode='markers',
 		visible=True,
 		marker=marker,
-		text=point_anno
+		text=point_anno,
+		error_y=dict(
+			type='data',
+			array=error_y,
+			visible=True
+		)		
 	)
 	
 	#return
 	return plot_type, title, xlabel, ylabel, scatter_obj, xlim, ylim, xscale, yscale, x_dtick, y_dtick
 
-def line(x,y,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,width=None,color=None,name=None,xscale=None,yscale=None,x_dtick=None,y_dtick=None):
+def line(x,y,error_y=None,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,width=None,color=None,name=None,xscale=None,yscale=None,x_dtick=None,y_dtick=None):
 
 	#plot type
 	plot_type='line'
@@ -108,6 +144,11 @@ def line(x,y,title=None,xlabel=None,ylabel=None,xlim=None,ylim=None,width=None,c
 		name=name,
 		x=x,
 		y=y,
+		error_y=dict(
+			type='data',
+			array=error_y,
+			visible=True
+		),
 		line=line
 	)
 
