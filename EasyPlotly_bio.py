@@ -206,45 +206,68 @@ def roc(preds, gt, panel=1, names=None, title=None, xscale=None, yscale=None):
     return plots, panels
 
 
-def ecdf(data, minbin, maxbin, binsize, title=None, xlabel=None, ylabel=None, norm=False, name=None, xscale=None,
-         yscale=None, x_dtick=None, y_dtick=None):
+def ecdf(data, minbin=None, maxbin=None, binsize=None, title=None, xlabel=None, ylabel=None, norm=False, name=None,
+         xscale=None, yscale=None, x_dtick=None, y_dtick=None, color=None):
+    # default binning
+    if minbin is None:
+        minbin = np.nanmin(data)
+    if maxbin is None:
+        maxbin = np.nanmax(data)
+    if binsize is None:
+        binsize = 1
+
+    # histogram data and produce cdf
     counts, bin_edges = np.histogram(data, bins=np.arange(minbin, maxbin + binsize, binsize))
     counts_sum = np.sum(counts)
     counts = counts / counts_sum
     cdf = np.cumsum(counts)
+
+    # plot
     if not norm:
         if ylabel is None:
             ylabel = 'Cum Freq'
-        cdf_line = EP.line(x=bin_edges[1:], y=countsSum * cdf, title=title, xlabel=xlabel, ylabel=ylabel,
-                           xlim=[minbin, maxbin + binsize], name=name, xscale=xscale, yscale=yscale, x_dtick=x_dTick,
-                           y_dtick=y_dTick)
+        cdf_line = EP.line(x=bin_edges[:-1], y=counts_sum * cdf, title=title, xlabel=xlabel, ylabel=ylabel,
+                           xlim=[minbin, maxbin + binsize], name=name, xscale=xscale, yscale=yscale, x_dtick=x_dtick,
+                           y_dtick=y_dtick, color=color)
     else:
         if ylabel is None:
             ylabel = 'CDF'
-        cdf_line = EP.line(x=bin_edges[1:], y=cdf, title=title, xlabel=xlabel, ylabel=ylabel,
+        cdf_line = EP.line(x=bin_edges[:-1], y=cdf, title=title, xlabel=xlabel, ylabel=ylabel,
                            xlim=[minbin, maxbin + binsize], ylim=[0, 1.0], name=name, xscale=xScale, yscale=yscale,
-                           x_dtick=x_dtick, y_dtick=y_dtick)
+                           x_dtick=x_dtick, y_dtick=y_dtick, color=color)
     return cdf_line
 
 
-def rcdf(data, minbin, maxbin, binsize, title=None, xlabel=None, ylabel=None, norm=False, name=None, xscale=None,
-         yscale=None, x_dtick=None, y_dtick=None):
+def rcdf(data, minbin=None, maxbin=None, binsize=None, title=None, xlabel=None, ylabel=None, norm=False, name=None,
+         xscale=None,
+         yscale=None, x_dtick=None, y_dtick=None, color=None):
+    # default binning
+    if minbin is None:
+        minbin = np.nanmin(data)
+    if maxbin is None:
+        maxbin = np.nanmax(data)
+    if binsize is None:
+        binsize = 1
+
+    # histogram data and produce cdf
     counts, bin_edges = np.histogram(data, bins=np.arange(minbin, maxbin + binsize, binsize))
     counts_sum = np.sum(counts)
     counts = counts / counts_sum
     cdf = np.cumsum(counts)
+
+    # plot
     if not norm:
         if ylabel is None:
-            ylabel = 'Inverse Cum Freq'
-        cdf_line = EP.line(x=bin_edges[1:], y=np.round(counts_sum * (1.0 - cdf), 5), title=title, xlabel=xlabel,
+            ylabel = 'Reverse Cum Freq'
+        cdf_line = EP.line(x=bin_edges[:-1], y=np.round(counts_sum * (1.0 - cdf), 5), title=title, xlabel=xlabel,
                            ylabel=ylabel, xlim=[minbin, maxbin + binsize], name=name, xscale=xscale, yscale=yscale,
-                           x_dtick=x_dtick, y_dtick=y_dtick)
+                           x_dtick=x_dtick, y_dtick=y_dtick, color=color)
     else:
         if ylabel is None:
             ylabel = 'CDF'
-        cdf_line = EP.line(x=bin_edges[1:], y=np.round(1.0 - cdf, 5), title=title, xlabel=xlabel, ylabel=ylabel,
+        cdf_line = EP.line(x=bin_edges[:-1], y=np.round(1.0 - cdf, 5), title=title, xlabel=xlabel, ylabel=ylabel,
                            xlim=[minbin, maxbin + binsize], ylim=[0, 1.0], name=name, xscale=xscale, yscale=yscale,
-                           x_dtick=x_dtick, y_dtick=y_dtick)
+                           x_dtick=x_dtick, y_dtick=y_dtick, color=color)
     return cdf_line
 
 
@@ -277,5 +300,6 @@ def nonparametric_ci(x, y_data, conf=0.95, ci_plot_type='line', color=None, xlab
                           yscale=yscale, x_dtick=x_dtick, y_dtick=y_dtick, xlim=xlim, ylim=ylim)
         return mean_pl, ll_pl, ul_pl
     elif ci_plot_type == 'point':
-        return EP.line(x=x, y=m, ucl=np.abs(ul-m), lcl=np.abs(ll-m), color=color, name=name, xlabel=xlabel, ylabel=ylabel, title=title,
+        return EP.line(x=x, y=m, ucl=np.abs(ul - m), lcl=np.abs(ll - m), color=color, name=name, xlabel=xlabel,
+                       ylabel=ylabel, title=title,
                        xscale=xscale, yscale=yscale, x_dtick=x_dtick, y_dtick=y_dtick, xlim=xlim, ylim=ylim)
