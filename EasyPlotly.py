@@ -276,7 +276,7 @@ def plot_all(plots, panels=None, height=None, width=None, withhold=False, numcol
             panel_titles[panel_index - 1] = plot_title
 
     # make overall figure
-    fig = plotly.tools.make_subplots(rows=num_rows, cols=numcols, subplot_titles=panel_titles, print_grid=False)
+    fig = plotly.subplots.make_subplots(rows=num_rows, cols=numcols, subplot_titles=panel_titles, print_grid=False)
     title_positions = extract_panel_title_positions(fig)
 
     # loop over plot generation

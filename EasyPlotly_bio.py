@@ -29,7 +29,7 @@ def chr_rolling_median(chr_pos_df, chr_val_df, rollwinsize, ylabel=None, title=N
     # plot
     x = chr_pos_df.values
     y = chr_val_df.rolling(rollwinsize).median()
-    line_plot = EP.line(x=x, y=y, title=title, xlabel='Chr Position', ylabel=ylabel, ylim=ylim)
+    line_plot = EP.line(x=x, y=y, title=title, xlabel='Chr Position', ylabel=ylabel, xlim=xlim, ylim=ylim)
     if withhold:
         return line_plot
     else:
@@ -130,7 +130,7 @@ def chr_hist(df, chr_col, col_name, minbin=None, maxbin=None, binsize=None, titl
             hists.append(EP_hist)
 
     # make plot
-    EP.plot_all(hists, numcols=5, title=title, chrpacked=True, outfile=outFile)
+    EP.plot_all(hists, numcols=5, title=title, chrpacked=True, outfile=outfile)
 
 
 def chr_qq(df, chr_col, col_name, sparams=(), dist='norm', title=None, outfile=None):
@@ -159,7 +159,7 @@ def chr_qq(df, chr_col, col_name, sparams=(), dist='norm', title=None, outfile=N
             panel_index = panel_index + 1
 
     # make plot
-    EP.plot_all(plots, panels=panels, numcols=5, height=1000, title=title, chrpacked=True, outfile=outFile)
+    EP.plot_all(plots, panels=panels, numcols=5, height=1000, title=title, chrpacked=True, outfile=outfile)
 
 
 def qqplot(data, sparams=(), dist='norm', title=None, name=None, marker_color='blue', line_color='red'):
@@ -169,7 +169,7 @@ def qqplot(data, sparams=(), dist='norm', title=None, name=None, marker_color='b
                                marker_color=marker_color, name=name)
     if name is None:
         name = ''
-    line_plot = EP.line(x=x, y=qq[1][1] + qq[1][0] * x, width=3, color=lineColor, title=title,
+    line_plot = EP.line(x=x, y=qq[1][1] + qq[1][0] * x, width=3, color=line_color, title=title,
                         name=(name + ' (distribution=' + dist + ')'))
     return pts_scatter, line_plot
 

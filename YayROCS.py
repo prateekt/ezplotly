@@ -1,4 +1,6 @@
 import numpy as np
+from sklearn.neighbors import KernelDensity
+import scipy.signal as ss
 
 
 # input = predictor vector, ground truth vector
@@ -75,7 +77,7 @@ def compute_p_value(distr, observed, tailed='two-tailed'):
     # identify ranks
     rank = np.where(combined_data == observed)
     lrank = rank[0][0]
-    rrank = N - rank[0][-1] - 1
+    rrank = n - rank[0][-1] - 1
 
     # tails
     lp = lrank / n
@@ -111,4 +113,32 @@ def nonparametric_ci(data, conf=0.95):
         m[d_cnt] = np.mean(samples)
 
     # return
-    return m, ll, ul,
+    return m, ll, ul
+
+
+# generate pdf
+def pdf(data, bin_edges, method='KDE'):
+    bin_width = bin_edges[1] - bin_edges[0]
+    bin_centers = bin_edges + bin_width / 2.0
+    bin_centers = bin_centers[:-1]
+    if method == 'KDE':
+        kde = KernelDensity(kernel='gaussian', bandwidth=1.0).fit(data)
+        distr = kde.score_samples(bin_edges)
+        distr = np.exp(distr)
+    elif method == 'hist':
+        distr = np.histogram(data, bins=bin_edges.squeeze())[0]
+    distr = distr / np.sum(distr)
+    bin_centers = bin_centers.squeeze()
+    return distr, bin_centers
+
+
+# find modes
+def find_modes(data, bin_edges, method='KDE'):
+    # get data distribution
+    distr, bin_centers = pdf(data=data, bin_edges=bin_edges, method=method)
+
+    # find relative maxima
+    maxima_inds = ss.argrelextrema(distr, np.greater)[0]
+    x_maxima = bin_edges[maxima_inds].squeeze()
+    y_maxima = distr[maxima_inds].squeeze()
+    return x_maxima, y_maxima
