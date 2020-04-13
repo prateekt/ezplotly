@@ -46,7 +46,7 @@ def hist(data, min_bin=None, max_bin=None, bin_size=None, histnorm=None, title=N
 
 
 def bar(y, x=(), error_y=None, title=None, xlabel=None, ylabel=None, xlim=None, ylim=None, name=None, xscale=None,
-        yscale=None, x_dtick=None, y_dtick=None):
+        yscale=None, x_dtick=None, y_dtick=None, text=None, textposition=None, color=None):
     # plot type
     plot_type = 'bar'
 
@@ -63,7 +63,10 @@ def bar(y, x=(), error_y=None, title=None, xlabel=None, ylabel=None, xlim=None, 
             type='data',
             array=error_y,
             visible=True
-        )
+        ),
+        text=text,
+        textposition=textposition,
+        marker_color=color
     )
 
     # return
