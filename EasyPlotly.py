@@ -1,6 +1,5 @@
 import plotly
 import plotly.express as px
-
 plotly.offline.init_notebook_mode()  # run at the start of every notebook
 import plotly.graph_objs as go
 import numpy as np
@@ -248,7 +247,7 @@ def extract_panel_title_positions(fig):
 
 
 def plot_all(plots, panels=None, height=None, width=None, withhold=False, numcols=1, title=None, showlegend=False,
-             chrpacked=False, outfile=None):
+             chrpacked=False, outfile=None, suppress_output=False):
     # compute num panels needed to display everything
     if panels is None:
         num_panels = len(plots)
@@ -350,6 +349,7 @@ def plot_all(plots, panels=None, height=None, width=None, withhold=False, numcol
     if withhold:  # return fig (if additional custom changes need to be made)
         return fig
     else:
-        plotly.offline.iplot(fig, filename='Subplot')
+        if not suppress_output:
+            plotly.offline.iplot(fig, filename='Subplot')
         if outfile is not None:
             plotly.io.write_image(fig, file=outfile)
