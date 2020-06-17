@@ -1,6 +1,6 @@
 import plotly
 import plotly.express as px
-plotly.offline.init_notebook_mode()  # run at the start of every notebook
+#plotly.offline.init_notebook_mode()  # run at the start of every notebook
 import plotly.graph_objs as go
 import numpy as np
 import copy
@@ -218,7 +218,7 @@ def scatterheat(x, y, xbins, ybins, zscale='linear', title=None, xlabel=None, yl
 
 
 def heatmap(z, xlabels=None, ylabels=None, title=None, xlabel=None, ylabel=None, xlim=None, ylim=None, xscale=None,
-            yscale=None, x_dtick=None, y_dtick=None, cscale=None):
+            yscale=None, x_dtick=None, y_dtick=None, cscale=None, showscale=True):
     # plot type
     plot_type = 'heatmap'
 
@@ -231,7 +231,7 @@ def heatmap(z, xlabels=None, ylabels=None, title=None, xlabel=None, ylabel=None,
         zmax = cScale[1]
 
     # make heatmap object
-    heatmap_obj = go.Heatmap(z=z, x=xlabels, y=ylabels, zmin=zmin, zmax=zmax)
+    heatmap_obj = go.Heatmap(z=z, x=xlabels, y=ylabels, zmin=zmin, zmax=zmax, showscale=showscale)
 
     # return
     return plot_type, title, xlabel, ylabel, heatmap_obj, xlim, ylim, xscale, yscale, x_dtick, y_dtick

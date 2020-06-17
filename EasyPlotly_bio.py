@@ -271,16 +271,20 @@ def rcdf(data, minbin=None, maxbin=None, binsize=None, title=None, xlabel=None, 
     return cdf_line
 
 
-def corr_plot(x, y, xlabel=None, ylabel=None, title=None, name=None, xscale=None, yscale=None, x_dtick=None,
-              y_dtick=None, xlim=None, ylim=None):
+def corr_plot(x, y, error_y=None, xlabel=None, ylabel=None, title=None, name=None, xscale=None, yscale=None, x_dtick=None,
+              y_dtick=None, xlim=None, ylim=None,plot_type='scatter'):
     corr_val = pd.core.nanops.nancorr(x, y)
     if name is None:
         name = 'corr=' + str(np.round(corr_val, 3))
     else:
         name = name + ' (' + 'corr=' + str(np.round(corr_val, 3)) + ')'
-    scatter_plot = EP.scattergl(x=x, y=y, xlabel=xlabel, ylabel=ylabel, title=title, name=name, xscale=xscale,
-                                yscale=yscale, x_dtick=x_dtick, y_dtick=y_dtick, xlim=xlim, ylim=ylim)
-    return scatter_plot
+    if plot_type == 'scatter':
+        corr_plot = EP.scattergl(x=x, y=y, error_y=error_y,xlabel=xlabel, ylabel=ylabel, title=title, name=name, xscale=xscale,
+                                    yscale=yscale, x_dtick=x_dtick, y_dtick=y_dtick, xlim=xlim, ylim=ylim)
+    elif plot_type == 'line':
+        corr_plot = EP.line(x=x, y=y, error_y=error_y,xlabel=xlabel, ylabel=ylabel, title=title, name=name, xscale=xscale,
+                                    yscale=yscale, x_dtick=x_dtick, y_dtick=y_dtick, xlim=xlim, ylim=ylim)
+    return corr_plot
 
 
 def nonparametric_ci(x, y_data, conf=0.95, ci_plot_type='line', color=None, xlabel=None, ylabel=None, title=None,
