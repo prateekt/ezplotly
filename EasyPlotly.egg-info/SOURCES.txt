@@ -1,0 +1,6 @@
+README.md
+setup.py
+EasyPlotly.egg-info/PKG-INFO
+EasyPlotly.egg-info/SOURCES.txt
+EasyPlotly.egg-info/dependency_links.txt
+EasyPlotly.egg-info/top_level.txt
