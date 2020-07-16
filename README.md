@@ -5,7 +5,11 @@ Plotly offers interactive plots, as opposed to the static plots that most other 
 
 To make plotling with Plotly in python simpler (and more matplotlib or matlab-like), we introduce EasyPlotly -- a wrapper on plotly that makes plotting WAY easier. Works extremely well in a python Jupyter notebook environment!
 
-Example syntax:
+# Installation
+
+pip install -i https://test.pypi.org/simple/ EasyPlotly==0.0.5
+
+# Example syntax:
 
 ```python
 import EasyPlotly as EP
@@ -14,5 +18,7 @@ exampleHist = EP.hist(data=a,min_bin=0.0,max_bin=1.0,bin_size=0.1,title='MyHisto
 exampleScatter = EP.scattergl(x=a,y=b,title='Test',xlabel='x',ylabel='y')
 EP.plotAll([exampleHist,exampleScatter])
 ```
+
+# EasyPlotly_bio for Bioinformaticians:
 
 In the bioinformatics domain? Currently in the works is a bioinformatics extension (EasyPlotly_bio) for making common bioinformatics plots such as qqplots, chromosome rolling medians, chromsome count bar charts, and chromosome histograms.
