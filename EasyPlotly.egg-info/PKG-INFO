@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: EasyPlotly
-Version: 0.0.1
+Version: 0.0.5
 Summary: An easy wrapper for making plotly plots in python jupyter notebooks
 Home-page: https://github.com/prateekt/EasyPlotly
 Author: Prateek Tandon
