@@ -7,7 +7,7 @@ To make plotling with Plotly in python simpler (and more matplotlib or matlab-li
 
 # Installation
 
-pip install -i https://test.pypi.org/simple/ EasyPlotly==0.0.5
+pip install EZPlotly==0.0.6
 
 # Example syntax:
 
