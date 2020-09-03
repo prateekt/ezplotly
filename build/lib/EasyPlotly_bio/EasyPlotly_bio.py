@@ -13,7 +13,7 @@ def manhattan_plot(df, pos_col_name, pvalue_col_name, title=None, height=None):
     h = [None] * 22
     for chrs in range(1, 23):
         chr_name = 'chr' + str(chrs)
-        chr_df = df[df.Chr == chrName]
+        chr_df = df[df.Chr == chr_name]
         max_pos = np.max(chr_df[pos_col_name].values)
         pts_x = chrDF[pos_col_name].values + running_pos
         pts_y = -1 * np.log10(chr_df[pvalue_col_name].values)
@@ -126,7 +126,7 @@ def chr_hist(df, chr_col, col_name, minbin=None, maxbin=None, binsize=None, titl
         if u_chr in uniq_vals:
             data = df[col_name][df.iloc[:, chr_col] == u_chr]
             EP_hist = EP.hist(data, title=u_chr, xlabel=xlabel, minbin=minbin, maxbin=maxbin, binsize=binsize,
-                              ylabel=ylabel, color='#1ad1ff', histnorm=histnorm, x_dTick=x_dtick, y_dTick=y_dtick)
+                              ylabel=ylabel, color='#1ad1ff', histnorm=histnorm, x_dtick=x_dtick, y_dtick=y_dtick)
             hists.append(EP_hist)
 
     # make plot

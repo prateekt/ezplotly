@@ -1,11 +1,11 @@
 README.md
 setup.py
+EZPlotly.egg-info/PKG-INFO
+EZPlotly.egg-info/SOURCES.txt
+EZPlotly.egg-info/dependency_links.txt
+EZPlotly.egg-info/top_level.txt
 EasyPlotly/EasyPlotly.py
 EasyPlotly/__init__.py
-EasyPlotly.egg-info/PKG-INFO
-EasyPlotly.egg-info/SOURCES.txt
-EasyPlotly.egg-info/dependency_links.txt
-EasyPlotly.egg-info/top_level.txt
 EasyPlotly_bio/EasyPlotly_bio.py
 EasyPlotly_bio/__init__.py
 YayROCS/YayROCS.py

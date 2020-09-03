@@ -227,8 +227,8 @@ def heatmap(z, xlabels=None, ylabels=None, title=None, xlabel=None, ylabel=None,
         zmin = None
         zmax = None
     else:
-        zmin = cScale[0]
-        zmax = cScale[1]
+        zmin = cscale[0]
+        zmax = cscale[1]
 
     # make heatmap object
     heatmap_obj = go.Heatmap(z=z, x=xlabels, y=ylabels, zmin=zmin, zmax=zmax, showscale=showscale)
