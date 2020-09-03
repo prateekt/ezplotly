@@ -7,7 +7,7 @@ To make plotling with Plotly in python simpler (and more matplotlib or matlab-li
 
 # Installation
 
-pip install -i https://test.pypi.org/simple/ EasyPlotly==0.0.5
+pip install EZPlotly==0.0.6
 
 # Example syntax:
 
@@ -16,7 +16,7 @@ import EasyPlotly as EP
 
 exampleHist = EP.hist(data=a,min_bin=0.0,max_bin=1.0,bin_size=0.1,title='MyHistogram',xlabel='a')
 exampleScatter = EP.scattergl(x=a,y=b,title='Test',xlabel='x',ylabel='y')
-EP.plotAll([exampleHist,exampleScatter])
+EP.plot_all([exampleHist,exampleScatter])
 ```
 
 # EasyPlotly_bio for Bioinformaticians:
