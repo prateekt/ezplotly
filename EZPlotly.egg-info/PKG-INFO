@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: EZPlotly
-Version: 0.0.6
+Version: 0.0.7
 Summary: An easy wrapper for making plotly plots in python jupyter notebooks
 Home-page: https://github.com/prateekt/EasyPlotly
 Author: Prateek Tandon
@@ -15,7 +15,7 @@ Description: # EasyPlotly and EasyPlotly_bio For Python Notebooks
         
         # Installation
         
-        pip install -i https://test.pypi.org/simple/ EasyPlotly==0.0.5
+        pip install EZPlotly==0.0.6
         
         # Example syntax:
         
@@ -24,7 +24,7 @@ Description: # EasyPlotly and EasyPlotly_bio For Python Notebooks
         
         exampleHist = EP.hist(data=a,min_bin=0.0,max_bin=1.0,bin_size=0.1,title='MyHistogram',xlabel='a')
         exampleScatter = EP.scattergl(x=a,y=b,title='Test',xlabel='x',ylabel='y')
-        EP.plotAll([exampleHist,exampleScatter])
+        EP.plot_all([exampleHist,exampleScatter])
         ```
         
         # EasyPlotly_bio for Bioinformaticians:
@@ -35,5 +35,5 @@ Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
-Requires-Python: >=3.7
+Requires-Python: >=3.6
 Description-Content-Type: text/markdown
