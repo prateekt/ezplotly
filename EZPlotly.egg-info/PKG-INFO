@@ -1,7 +1,7 @@
 Metadata-Version: 2.1
 Name: EZPlotly
-Version: 0.0.7
-Summary: An easy wrapper for making plotly plots in python jupyter notebooks
+Version: 0.0.8
+Summary: An easy wrapper for making Plotly plots in Jupyter notebooks
 Home-page: https://github.com/prateekt/EasyPlotly
 Author: Prateek Tandon
 Author-email: prateek1.tandon@gmail.com
@@ -25,7 +25,7 @@ In addition, EZPlotly offers domain-specific extensions for making interactive d
 
 # Installation
 
-pip install EZPlotly==0.0.7
+pip install EZPlotly
 
 # Example syntax:
 

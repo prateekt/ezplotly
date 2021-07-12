@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="EZPlotly",
-    version="0.0.7",
+    version="0.0.8",
     author="Prateek Tandon",
     author_email="prateek1.tandon@gmail.com",
     description="An easy wrapper for making Plotly plots in Jupyter notebooks",

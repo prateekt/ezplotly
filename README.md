@@ -9,7 +9,7 @@ In addition, EZPlotly offers domain-specific extensions for making interactive d
 
 # Installation
 
-pip install EZPlotly==0.0.7
+pip install EZPlotly
 
 # Example syntax:
 
