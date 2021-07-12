@@ -1,0 +1,12 @@
+[build-system]
+requires = [
+    "setuptools>=42",
+    "wheel",
+    "plotly==5.1.0",
+    "numpy",
+    "scipy",
+    "pandas",
+    "scikit-learn",
+    "kaleido"
+]
+build-backend = "setuptools.build_meta"

@@ -1,3 +1,3 @@
-EasyPlotly
-EasyPlotly_bio
+EZPlotly
+EZPlotly_bio
 YayROCS

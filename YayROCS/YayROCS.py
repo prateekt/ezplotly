@@ -32,10 +32,10 @@ def roc(pred, gt):
     results = results[ind]
 
     # roc compute
-    fpr = np.zeros((A + 1,))
-    tpr = np.zeros((A + 1,))
+    fpr = np.zeros((a + 1,))
+    tpr = np.zeros((a + 1,))
     cnt = 1
-    for i in range(0, A):
+    for i in range(0, a):
         if results[i, 1] == 1:
             current_y = current_y + step_y
             fpr[cnt] = current_x

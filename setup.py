@@ -8,7 +8,7 @@ setuptools.setup(
     version="0.0.7",
     author="Prateek Tandon",
     author_email="prateek1.tandon@gmail.com",
-    description="An easy wrapper for making plotly plots in python jupyter notebooks",
+    description="An easy wrapper for making Plotly plots in Jupyter notebooks",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/prateekt/EasyPlotly",

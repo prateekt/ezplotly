@@ -1,4 +1,4 @@
-import EasyPlotly as EP
+import EZPlotly as EP
 import YayROCS as YP
 import pandas as pd
 import scipy.stats as sc
