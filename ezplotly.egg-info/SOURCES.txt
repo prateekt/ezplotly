@@ -1,0 +1,14 @@
+LICENSE.txt
+README.md
+pyproject.toml
+setup.py
+ezplotly/__init__.py
+ezplotly/ezplotly.py
+ezplotly.egg-info/PKG-INFO
+ezplotly.egg-info/SOURCES.txt
+ezplotly.egg-info/dependency_links.txt
+ezplotly.egg-info/top_level.txt
+ezplotly_bio/__init__.py
+ezplotly_bio/ezplotly_bio.py
+yayrocs/__init__.py
+yayrocs/yayrocs.py

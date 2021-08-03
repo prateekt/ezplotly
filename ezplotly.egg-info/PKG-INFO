@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
-Name: EZPlotly
-Version: 0.0.8
+Name: ezplotly
+Version: 0.0.9
 Summary: An easy wrapper for making Plotly plots in Jupyter notebooks
 Home-page: https://github.com/prateekt/EasyPlotly
 Author: Prateek Tandon
@@ -30,11 +30,11 @@ pip install EZPlotly
 # Example syntax:
 
 ```python
-import EZPlotly as EP
+import ezplotly as EP
 
-exampleHist = EP.hist(data=a,min_bin=0.0,max_bin=1.0,bin_size=0.1,title='MyHistogram',xlabel='a')
-exampleScatter = EP.scattergl(x=a,y=b,title='Test',xlabel='x',ylabel='y')
-EP.plot_all([exampleHist,exampleScatter])
+exampleHist = EP.hist(data=a, min_bin=0.0, max_bin=1.0, bin_size=0.1, title='MyHistogram', xlabel='a')
+exampleScatter = EP.scattergl(x=a, y=b, title='Test', xlabel='x', ylabel='y')
+EP.plot_all([exampleHist, exampleScatter])
 ```
 
 For more examples, checkout run the EZPlotlyExamples.ipynb in Jupyter!

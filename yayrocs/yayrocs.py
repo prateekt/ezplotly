@@ -1,10 +1,20 @@
+from typing import Tuple, List
 import numpy as np
 from sklearn.neighbors import KernelDensity
 import scipy.signal as ss
 
 
-# input = predictor vector, ground truth vector
-def roc(pred, gt):
+def roc(pred: np.array, gt: np.array) -> Tuple[np.array, np.array]:
+    """
+    Generates calculations for a Receiver Operating Characteristic (ROC) curve.
+
+    :param pred: Predictor vector as `np.array[float]`
+    :param gt: Ground truth labels vector as `np.array[float]`
+    :return:
+        fpr: False Positive Rate (FPR) data vector of ROC curve as `np.array[float]`
+        tpr: True Positive Rate (TPR) data vector of ROC curve as `np.array[float]`
+    """
+
     # make sure pred /gt are correct shape
     if (pred.ndim == 2) and (pred.shape[1] > pred.shape[0]):
         pred = pred.T
@@ -52,8 +62,15 @@ def roc(pred, gt):
     return fpr, tpr
 
 
-# input 1 roc (X,Y)
-def auc(x, y):
+def auc(x, y) -> float:
+    """
+    Calculates AUC of a roc curve. Inputs 1 ROC curve and outputs the AUC of it.
+
+    :param x: FPR data vector of roc curve as `np.array[float]`
+    :param y: TPR data vector of roc curve as `np.array[float]`
+    :return:
+        AUC: The Area Under the Curve (AUC) as `float`
+    """
     # align to reference binning
     ref_binning = np.arange(0, 1.1, 0.01)
     bin_ind = 0
@@ -67,10 +84,19 @@ def auc(x, y):
     return auc_val
 
 
-# compute p-value based on distribution and observed point
-def compute_p_value(distr, observed, tailed='two-tailed'):
+def compute_p_value(data_sample: np.array, observed: float, tailed: str = 'two-tailed') -> float:
+    """
+    Computes a p-value of an observed point relative to a data distribution based on rank of
+    an observed point relative to a data sample. Computes either a left, right, or two-tailed p-value.
+
+    :param data_sample: The data sample of the original distribution as `np.array[float]`
+    :param observed: The observed point as `float`
+    :param tailed: Whether to produce a right, left, or two-tailed p-value as `str`
+    :return:
+        p_val: The computed p-value as `float`
+    """
     # combine data and sort
-    combined_data = np.append(distr, observed)
+    combined_data = np.append(data_sample, observed)
     combined_data.sort()
     n = len(combined_data)
 
@@ -88,12 +114,23 @@ def compute_p_value(distr, observed, tailed='two-tailed'):
         p_val = rp
     elif tailed == 'two-tailed':
         p_val = np.min([lp, rp])
+    else:
+        raise ValueError('tailed parameter be must {left, right, two-tailed}.')
     return p_val
 
 
-# compute nonparametric confidence intervals
-# data is nxd (# samples by data points)
-def nonparametric_ci(data, conf=0.95):
+def nonparametric_ci(data: np.array, conf: float = 0.95) -> Tuple[np.array, np.array, np.array]:
+    """
+    Compute nonparametric confidence intervals on data.
+
+    :param data: The data sample as `np.array[float].`
+        data is a nxd (# samples by data points) matrix.
+    :param conf: The % confidence interval as `float`
+    :return:
+        m: sample mean as `np.array`
+        ll: lower confidence limit as `np.array`
+        ul: upper confidence limit as `np.array`
+    """
     # shapes
     n = data.shape[0]
     d = data.shape[1]
@@ -116,8 +153,18 @@ def nonparametric_ci(data, conf=0.95):
     return m, ll, ul
 
 
-# generate pdf
-def pdf(data, bin_edges, method='KDE'):
+def pdf(data: np.array, bin_edges: np.array, method: str = 'KDE') -> Tuple[np.array, np.array]:
+    """
+    Generates probability distribution function (PDF) of data. Allows histogram and Kernel Density Estimation (KDE)
+    methods of producing PDFs.
+
+    :param data: The data as `np.array[float]`
+    :param bin_edges: Bin edges list as [left_bin_edge, right_bin_edge] for estimation as `np.array[float]`
+    :param method: Estimation method as `str` (either hist or KDE).
+    :return:
+        distr: The estimated pdf as `np.array`
+        bin_centers: The bin centers as `np.array`
+    """
     bin_width = bin_edges[1] - bin_edges[0]
     bin_centers = bin_edges + bin_width / 2.0
     bin_centers = bin_centers[:-1]
@@ -127,13 +174,25 @@ def pdf(data, bin_edges, method='KDE'):
         distr = np.exp(distr)
     elif method == 'hist':
         distr = np.histogram(data, bins=bin_edges.squeeze())[0]
+    else:
+        raise ValueError('method parameter must be hist or KDE.')
     distr = distr / np.sum(distr)
     bin_centers = bin_centers.squeeze()
     return distr, bin_centers
 
 
-# find modes
-def find_modes(data, bin_edges, method='KDE'):
+def find_modes(data: np.array, bin_edges: np.array, method: str = 'KDE') -> Tuple[np.array, np.array]:
+    """
+    Find extrema in data.
+
+    :param data: Data sample as `np.array[float]`
+    :param bin_edges: The bin the edges for pdf as `np.array[float]`
+    :param method: The method of pdf estimation as `str`
+    :return:
+        x_maxima: The x-dimension of maxima as `np.array[float]`
+        y_maxima: The y-dimension of maxima as `np.array[float]`
+    """
+
     # get data distribution
     distr, bin_centers = pdf(data=data, bin_edges=bin_edges, method=method)
 
