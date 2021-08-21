@@ -84,7 +84,9 @@ def auc(x, y) -> float:
     return auc_val
 
 
-def compute_p_value(data_sample: np.array, observed: float, tailed: str = 'two-tailed') -> float:
+def compute_p_value(
+    data_sample: np.array, observed: float, tailed: str = "two-tailed"
+) -> float:
     """
     Computes a p-value of an observed point relative to a data distribution based on rank of
     an observed point relative to a data sample. Computes either a left, right, or two-tailed p-value.
@@ -108,18 +110,20 @@ def compute_p_value(data_sample: np.array, observed: float, tailed: str = 'two-t
     # tails
     lp = lrank / n
     rp = rrank / n
-    if tailed == 'left':
+    if tailed == "left":
         p_val = lp
-    elif tailed == 'right':
+    elif tailed == "right":
         p_val = rp
-    elif tailed == 'two-tailed':
+    elif tailed == "two-tailed":
         p_val = np.min([lp, rp])
     else:
-        raise ValueError('tailed parameter be must {left, right, two-tailed}.')
+        raise ValueError("tailed parameter be must {left, right, two-tailed}.")
     return p_val
 
 
-def nonparametric_ci(data: np.array, conf: float = 0.95) -> Tuple[np.array, np.array, np.array]:
+def nonparametric_ci(
+    data: np.array, conf: float = 0.95
+) -> Tuple[np.array, np.array, np.array]:
     """
     Compute nonparametric confidence intervals on data.
 
@@ -153,7 +157,9 @@ def nonparametric_ci(data: np.array, conf: float = 0.95) -> Tuple[np.array, np.a
     return m, ll, ul
 
 
-def pdf(data: np.array, bin_edges: np.array, method: str = 'KDE') -> Tuple[np.array, np.array]:
+def pdf(
+    data: np.array, bin_edges: np.array, method: str = "KDE"
+) -> Tuple[np.array, np.array]:
     """
     Generates probability distribution function (PDF) of data. Allows histogram and Kernel Density Estimation (KDE)
     methods of producing PDFs.
@@ -168,20 +174,22 @@ def pdf(data: np.array, bin_edges: np.array, method: str = 'KDE') -> Tuple[np.ar
     bin_width = bin_edges[1] - bin_edges[0]
     bin_centers = bin_edges + bin_width / 2.0
     bin_centers = bin_centers[:-1]
-    if method == 'KDE':
-        kde = KernelDensity(kernel='gaussian', bandwidth=1.0).fit(data)
+    if method == "KDE":
+        kde = KernelDensity(kernel="gaussian", bandwidth=1.0).fit(data)
         distr = kde.score_samples(bin_edges)
         distr = np.exp(distr)
-    elif method == 'hist':
+    elif method == "hist":
         distr = np.histogram(data, bins=bin_edges.squeeze())[0]
     else:
-        raise ValueError('method parameter must be hist or KDE.')
+        raise ValueError("method parameter must be hist or KDE.")
     distr = distr / np.sum(distr)
     bin_centers = bin_centers.squeeze()
     return distr, bin_centers
 
 
-def find_modes(data: np.array, bin_edges: np.array, method: str = 'KDE') -> Tuple[np.array, np.array]:
+def find_modes(
+    data: np.array, bin_edges: np.array, method: str = "KDE"
+) -> Tuple[np.array, np.array]:
     """
     Find extrema in data.
 
