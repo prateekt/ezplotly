@@ -27,7 +27,7 @@ def hist(
     min_bin: Optional[float] = None,
     max_bin: Optional[float] = None,
     bin_size: Optional[float] = None,
-    histnorm: str = '',
+    histnorm: str = "",
     title: Optional[str] = None,
     name: Optional[str] = None,
     xlabel: Optional[str] = None,
@@ -70,7 +70,7 @@ def hist(
     if ylabel is None:
         if histnorm.lower() == "probability":
             ylabel = "Probability"
-        elif histnorm == '':
+        elif histnorm == "":
             ylabel = "Frequency"
 
     # xbin properties
@@ -121,9 +121,10 @@ def bar(
     yscale: Optional[str] = None,
     x_dtick: Optional[float] = None,
     y_dtick: Optional[float] = None,
-    text: Optional[List[str]] = None,
-    textposition: Optional[str] = None,
-    hovertext: Optional[List[str]] = None,
+    text: Optional[Union[List[str], str]] = None,
+    textsize: Optional[Union[List[str], str]] = None,
+    textposition: Optional[Union[List[str], str]] = None,
+    hovertext: Optional[Union[List[str], str]] = None,
     color: Optional[str] = None,
 ) -> EZPlotlyPlot:
     """
@@ -142,9 +143,10 @@ def bar(
     :param yscale: The scale of the y-axis ('log', 'linear') as `Optional[str]`
     :param x_dtick: The plotting delta tick (i.e. tick length) of the x-axis as `Optional[float]`
     :param y_dtick: The plotting delta tick (i.e. tick length) of the y-axis as `Optional[float]`
-    :param text: Bar text for each bar as `Optional[List[str]]`
-    :param textposition:  Bar text position as `Optional[str]`
-    :param hovertext: Hover text associated with bars as `Optional[List[str]`
+    :param text: Bar text for each bar as `Optional[Union[List[str], str]]]`
+    :param textsize: Text size for each bar as `Optional[Union[List[str], str]]]`
+    :param textposition:  Bar text position as `Optional[Union[List[str], str]]`
+    :param hovertext: Hover text associated with bars as `Optional[Union[List[str], str]]`
     :param color: The color of the bar series as `Optional[str]`
     :return:
         `EZPlotlyPlot` object represent bar chart
@@ -164,6 +166,7 @@ def bar(
         y=y,
         error_y=dict(type="data", array=error_y, visible=True),
         text=text,
+        textfont=dict(size=textsize),
         textposition=textposition,
         hovertext=hovertext,
         marker_color=color,
@@ -190,7 +193,7 @@ def bar_hist(
     min_bin: Optional[float] = None,
     max_bin: Optional[float] = None,
     bin_size: Optional[float] = None,
-    histnorm: str = '',
+    histnorm: str = "",
     title: Optional[str] = None,
     name: Optional[str] = None,
     xlabel: Optional[str] = None,
@@ -228,7 +231,7 @@ def bar_hist(
         `EZPlotlyPlot` object representing histogram
     """
     # histogram using numpy
-    bin_range = np.arange(min_bin, max_bin+bin_size, bin_size)
+    bin_range = np.arange(min_bin, max_bin + bin_size, bin_size)
     hist_vals, bin_edges = np.histogram(data, bin_range)
 
     # normalize hist_vals if needed
@@ -239,7 +242,7 @@ def bar_hist(
     if ylabel is None:
         if histnorm == "probability":
             ylabel = "Probability"
-        elif histnorm == '':
+        elif histnorm == "":
             ylabel = "Frequency"
 
     # plot using bar plot
@@ -273,9 +276,10 @@ def scatter(
     marker_size: Optional[float] = None,
     marker_color: Optional[str] = None,
     name: Optional[str] = None,
-    point_anno: Optional[List[str]] = None,
-    textposition: Optional[str] = None,
-    hovertext: Optional[List[str]] = None,
+    point_anno: Optional[Union[List[str], str]] = None,
+    textsize: Optional[Union[List[str], str]] = None,
+    textposition: Optional[Union[List[str], str]] = None,
+    hovertext: Optional[Union[List[str], str]] = None,
     xscale: Optional[str] = None,
     yscale: Optional[str] = None,
     x_dtick: Optional[float] = None,
@@ -296,9 +300,10 @@ def scatter(
     :param marker_size: The size of a marker as `Optional[float]`
     :param marker_color: The color of a marker as `Optional[str]`
     :param name: The name of the scatter plot as `Optional[str]` (useful for plotting series)
-    :param point_anno: Text annotations for each point as `Optional[List[str]]`
-    :param textposition: The text position for point annotations as `Optional[str]`
-    :param hovertext: The hover text associated with each point as `Optional[List[str]]`
+    :param point_anno: Text annotations for each point as `Optional[Union[List[str], str]]]`
+    :param textsize: Text size for each bar as `Optional[Union[List[str], str]]]`
+    :param textposition:  Bar text position as `Optional[Union[List[str], str]]`
+    :param hovertext: Hover text associated with bars as `Optional[Union[List[str], str]]`
     :param xscale: The scale of the x-axis ('log', 'linear') as `Optional[str]`
     :param yscale: The scale of the y-axis ('log', 'linear') as `Optional[str]`
     :param x_dtick: The plotting delta tick (i.e. tick length) of the x-axis as `Optional[float]`
@@ -334,6 +339,7 @@ def scatter(
         visible=True,
         marker=marker,
         text=point_anno,
+        textfont=dict(size=textsize),
         textposition=textposition,
         hovertext=hovertext,
     )
@@ -367,9 +373,10 @@ def scattergl(
     marker_size: Optional[float] = None,
     marker_color: Optional[str] = None,
     name: Optional[str] = None,
-    point_anno: Optional[List[str]] = None,
-    textposition: Optional[str] = None,
-    hovertext: Optional[List[str]] = None,
+    point_anno: Optional[Union[List[str], str]] = None,
+    textsize: Optional[Union[List[str], str]] = None,
+    textposition: Optional[Union[List[str], str]] = None,
+    hovertext: Optional[Union[List[str], str]] = None,
     xscale: Optional[str] = None,
     yscale: Optional[str] = None,
     x_dtick: Optional[float] = None,
@@ -390,9 +397,10 @@ def scattergl(
     :param marker_size: The size of a marker as `Optional[float]`
     :param marker_color: The color of a marker as `Optional[str]`
     :param name: The name of the scatter plot as `Optional[str]` (useful for plotting series)
-    :param point_anno: Text annotations for each point as `Optional[List[str]]`
-    :param textposition: The text position as `Optional[str]`
-    :param hovertext: The hover text associated with each point as `Optional[List[str]]`
+    :param point_anno: Text annotations for each point as `Optional[Union[List[str], str]]`
+    :param textsize: Text size for each bar as `Optional[Union[List[str], str]]]`
+    :param textposition: The text position as `Optional[Union[List[str], str]]`
+    :param hovertext: The hover text associated with each point as `Optional[Union[List[str], str]]`
     :param xscale: The scale of the x-axis ('log', 'linear') as `Optional[str]`
     :param yscale: The scale of the y-axis ('log', 'linear') as 'Optiona[str]`
     :param x_dtick: The plotting delta tick (i.e. tick length) of the x-axis as `Optional[float]`
@@ -431,6 +439,7 @@ def scattergl(
         visible=True,
         marker=marker,
         text=point_anno,
+        textfont=dict(size=textsize),
         textposition=textposition,
         hovertext=hovertext,
     )
@@ -465,9 +474,10 @@ def line(
     width: Optional[float] = None,
     color: Optional[str] = None,
     name: Optional[str] = None,
-    point_anno: Optional[List[str]] = None,
-    textposition: Optional[str] = None,
-    hovertext: Optional[List[str]] = None,
+    point_anno: Optional[Union[List[str], str]] = None,
+    textsize: Optional[Union[List[str], str]] = None,
+    textposition: Optional[Union[List[str], str]] = None,
+    hovertext: Optional[Union[List[str], str]] = None,
     xscale: Optional[str] = None,
     yscale: Optional[str] = None,
     x_dtick: Optional[float] = None,
@@ -491,11 +501,12 @@ def line(
     :param width: The width of the line as 'Optional[float]`
     :param color: The color of the line as `Optional[str]`
     :param name: The name of the line plot as `Optional[str]` (useful for plotting as series)
-    :param point_anno: Text annotations for each point as `Optional[List[str]]`
-    :param textposition: The text position as `Optional[str]`
-    :param hovertext: The hover text associated with each point as `Optional[List[str]]`
-    :param xscale: The scale of the x-axis ('log', 'linear') as `Optional[float]`
-    :param yscale: The scale of the y-axis ('log', 'linear') as `Optional[float]`
+    :param point_anno: Text annotations for each point as `Optional[Union[List[str], str]]`
+    :param textsize: Text size for each bar as `Optional[Union[List[str], str]]]`
+    :param textposition: The text position as `Optional[Union[List[str], str]]`
+    :param hovertext: The hover text associated with each point as `Optional[Union[List[str], str]]`
+    :param xscale: The scale of the x-axis ('log', 'linear') as `Optional[str]`
+    :param yscale: The scale of the y-axis ('log', 'linear') as `Optional[str]`
     :param x_dtick: The plotting delta tick (i.e. tick length) of the x-axis as `Optional[float]`
     :param y_dtick: The plotting delta tick (i.e. tick length) of the y-axis as `Optional[float]`
     :param dash: The dash type as `Optional[str]`
@@ -531,8 +542,14 @@ def line(
 
     # make scatter object
     scatter_obj = go.Scattergl(
-        name=name, x=x, y=y, error_y=error_y_dict, line=line_dict, mode=mode,
+        name=name,
+        x=x,
+        y=y,
+        error_y=error_y_dict,
+        line=line_dict,
+        mode=mode,
         text=point_anno,
+        textfont=dict(size=textsize),
         textposition=textposition,
         hovertext=hovertext,
     )
