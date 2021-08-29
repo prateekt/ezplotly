@@ -86,9 +86,12 @@ def hist(
     if color is not None:
         marker["color"] = color
 
+    # legend properties
+    showlegend = name is not None
+
     # assemble hist object
     hist_obj = go.Histogram(
-        x=data, name=name, xbins=xbins, marker=marker, histnorm=histnorm
+        x=data, name=name, xbins=xbins, marker=marker, histnorm=histnorm, showlegend=showlegend
     )
 
     # return plot
@@ -159,6 +162,9 @@ def bar(
     if len(x) == 0:
         x = [a for a in range(0, len(y))]
 
+    # legend properties
+    showlegend = name is not None
+
     # assemble bar object
     bar_obj = go.Bar(
         name=name,
@@ -170,6 +176,7 @@ def bar(
         textposition=textposition,
         hovertext=hovertext,
         marker_color=color,
+        showlegend=showlegend,
     )
 
     # return
@@ -329,6 +336,9 @@ def scatter(
     else:
         mode = "markers"
 
+    # legend properties
+    showlegend = name is not None
+
     # make scatter gl object
     scatter_obj = go.Scatter(
         name=name,
@@ -342,6 +352,7 @@ def scatter(
         textfont=dict(size=textsize),
         textposition=textposition,
         hovertext=hovertext,
+        showlegend=showlegend,
     )
 
     # return
@@ -426,10 +437,15 @@ def scattergl(
     else:
         mode = "markers"
 
-    # make scatter gl object
+    # error y dict
     error_y_dict = None
     if error_y is not None:
         error_y_dict = dict(type="data", array=error_y, visible=True)
+
+    # legend properties
+    showlegend = name is not None
+
+    # make scatter gl object
     scatter_obj = go.Scattergl(
         name=name,
         x=x,
@@ -442,6 +458,7 @@ def scattergl(
         textfont=dict(size=textsize),
         textposition=textposition,
         hovertext=hovertext,
+        showlegend=showlegend,
     )
 
     # return
@@ -540,6 +557,9 @@ def line(
     else:
         mode = "lines"
 
+    # legend properties
+    showlegend = name is not None
+
     # make scatter object
     scatter_obj = go.Scattergl(
         name=name,
@@ -552,6 +572,7 @@ def line(
         textfont=dict(size=textsize),
         textposition=textposition,
         hovertext=hovertext,
+        showlegend=showlegend,
     )
 
     # return
@@ -604,8 +625,11 @@ def violin(
     # plot type
     plot_type = "violin"
 
+    # legend properties
+    showlegend = name is not None
+
     # make violin object
-    violin_obj = go.Violin(y=y, name=name)
+    violin_obj = go.Violin(y=y, name=name, showlegend=showlegend)
 
     # return
     return EZPlotlyPlot(
@@ -768,7 +792,7 @@ def heatmap(
 
     # make heatmap object
     heatmap_obj = go.Heatmap(
-        z=z, x=xlabels, y=ylabels, zmin=zmin, zmax=zmax, showscale=showcscale
+        z=z, x=xlabels, y=ylabels, zmin=zmin, zmax=zmax, showscale=showcscale,
     )
 
     # return
