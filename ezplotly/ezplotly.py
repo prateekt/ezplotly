@@ -243,19 +243,25 @@ def bar_hist(
 
     # normalize hist_vals if needed
     if histnorm == "probability":
-        hist_vals = hist_vals / np.sum(hist)
+        hist_vals = hist_vals / np.sum(hist_vals)
 
-    # y-label auto-setting
+    # xlim auto setting
+    if xlim is None:
+        xlim = [min_bin, max_bin]
+
+    # y-label amd y-lim auto-setting
     if ylabel is None:
         if histnorm == "probability":
             ylabel = "Probability"
+            if ylim is None:
+                ylim = [0.0, 1.0]
         elif histnorm == "":
             ylabel = "Frequency"
 
     # plot using bar plot
     return bar(
         y=hist_vals,
-        x=bin_range,
+        x=bin_range + bin_size / 2.0,
         title=title,
         name=name,
         xlabel=xlabel,
