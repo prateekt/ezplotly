@@ -2,10 +2,12 @@ import setuptools
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
+with open('requirements.txt') as f:
+    required = f.read().splitlines()
 
 setuptools.setup(
     name="ezplotly",
-    version="0.1.2.5",
+    version="0.1.2.7",
     author="Prateek Tandon",
     author_email="prateek1.tandon@gmail.com",
     description="An easy wrapper for making Plotly plots in Jupyter notebooks",
@@ -19,4 +21,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.6",
+    install_requires=required,
 )

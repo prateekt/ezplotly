@@ -1,0 +1,7 @@
+plotly==5.1.0
+numpy
+scipy
+pandas
+scikit-learn
+kaleido
+jupyter
