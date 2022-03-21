@@ -12,5 +12,5 @@ run_notebook_tests:
 	jupyter nbconvert --to notebook --execute EZPlotlyBioExamples.ipynb
 
 clean:
-	rm *.nbconvert*
+	rm -rf *.nbconvert*
 	rm -rf test_figs
