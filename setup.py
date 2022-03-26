@@ -7,13 +7,13 @@ with open('requirements.txt') as f:
 
 setuptools.setup(
     name="ezplotly",
-    version="0.1.2.8",
+    version="0.1.2.9",
     author="Prateek Tandon",
     author_email="prateek1.tandon@gmail.com",
     description="An easy wrapper for making Plotly plots in Jupyter notebooks",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/prateekt/EasyPlotly",
+    url="https://github.com/prateekt/ezplotly",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
