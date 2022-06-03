@@ -9,7 +9,7 @@ In addition, EZPlotly offers domain-specific extensions for making interactive d
 
 # Installation
 
-pip install EZPlotly
+pip install ezplotly
 
 # Example syntax:
 

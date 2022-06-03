@@ -1,11 +1,13 @@
-from typing import Sequence, List, Optional, Tuple, Any, Dict, NamedTuple, Union
+from typing import Sequence, List, Optional, Any, Dict, NamedTuple, Union
+
+import numpy as np
 import plotly
 import plotly.graph_objs as go
-import numpy as np
-
+import ezplotly.settings as plot_settings
 
 # Legacy Invocation
 # plotly.offline.init_notebook_mode()  # run at the start of every notebook
+from plotly.subplots import make_subplots
 
 
 class EZPlotlyPlot(NamedTuple):
@@ -91,7 +93,12 @@ def hist(
 
     # assemble hist object
     hist_obj = go.Histogram(
-        x=data, name=name, xbins=xbins, marker=marker, histnorm=histnorm, showlegend=showlegend
+        x=data,
+        name=name,
+        xbins=xbins,
+        marker=marker,
+        histnorm=histnorm,
+        showlegend=showlegend,
     )
 
     # return plot
@@ -212,6 +219,10 @@ def bar_hist(
     y_dtick: Optional[float] = None,
     xlim: Optional[List[float]] = None,
     ylim: Optional[List[float]] = None,
+    show_text: bool = False,
+    textsize: Optional[Union[Sequence[int], int]] = None,
+    textposition: Optional[Union[Sequence[str], str]] = None,
+    hovertext: Optional[Union[Sequence[str], str]] = None,
 ) -> EZPlotlyPlot:
     """
 
@@ -234,6 +245,10 @@ def bar_hist(
     :param y_dtick: The plotting delta tick (i.e. tick length) of the y-axis as `Optional[float]`
     :param xlim: The x-axis limits [x_left_lim, x_right_lim] as `Optional[List[float]]`
     :param ylim: The y-axis limits [y_left_lim, y_right_lim] as `Optional[List[float]]`
+    :param show_text: Whether to show test labels for each bar
+    :param textsize: Text size for each bar as `Optional[Union[Sequence[int], int]]]`
+    :param textposition:  Bar text position as `Optional[Union[Sequence[str], str]]`
+    :param hovertext: Hover text associated with bars as `Optional[Union[Sequence[str], str]]`
     :return:
         `EZPlotlyPlot` object representing histogram
     """
@@ -258,6 +273,12 @@ def bar_hist(
         elif histnorm == "":
             ylabel = "Frequency"
 
+    # text labels
+    if show_text:
+        text: Optional[List[str]] = [str(hist_val) for hist_val in hist_vals]
+    else:
+        text: Optional[List[str]] = None
+
     # plot using bar plot
     return bar(
         y=hist_vals,
@@ -273,6 +294,10 @@ def bar_hist(
         y_dtick=y_dtick,
         xlim=xlim,
         ylim=ylim,
+        text=text,
+        textsize=textsize,
+        textposition=textposition,
+        hovertext=hovertext,
     )
 
 
@@ -670,6 +695,9 @@ def scatterheat(
     x_dtick: Optional[float] = None,
     y_dtick: Optional[float] = None,
     cscale: Optional[List[float]] = None,
+    show_text_heatmap: bool = False,
+    texttemplate_heatmap: str = "%{text}",
+    text_size_heatmap: Optional[int] = None,
     outfile: Optional[str] = None,
     plot: bool = True,
 ) -> Optional[List[EZPlotlyPlot]]:
@@ -692,6 +720,9 @@ def scatterheat(
     :param x_dtick: The plotting delta tick (i.e. tick length) of the x-axis as `Optional[float]`
     :param y_dtick: The plotting delta tick (i.e. tick length) of the y-axis as `Optional[float]`
     :param cscale: The color scale for heatmap [c_lower_lim, c_upper_lim] as `Optional[List[float]]`
+    :param show_text_heatmap: Whether to plot text labels on heatmap or not as `bool`
+    :param texttemplate_heatmap: The text template to use on the heatmap as `str`
+    :param text_size_heatmap: Text size on heatmap labels as `int`
     :param outfile: If specified, save to this file as `Optional[str]`
     :param plot: Whether to plot right now or suppress plot and return the plot object
         for downstream plotting by the user as `bool`
@@ -708,8 +739,13 @@ def scatterheat(
     if zscale == "log":
         z = np.log10(z)
 
+    # prepare heatmap text labels
+    text: Optional[List[List[str]]] = None
+    if show_text_heatmap:
+        text = [[str(z[i, j]) for i in range(z.shape[0])] for j in range(z.shape[1])]
+
     # return plots
-    figs = list()
+    figs: List[EZPlotlyPlot] = list()
     figs.append(
         scattergl(
             x=x,
@@ -740,6 +776,9 @@ def scatterheat(
             x_dtick=x_dtick,
             y_dtick=y_dtick,
             cscale=cscale,
+            text=text,
+            texttemplate=texttemplate_heatmap,
+            text_size=text_size_heatmap,
         )
     )
     if plot:
@@ -763,9 +802,12 @@ def heatmap(
     y_dtick: Optional[float] = None,
     cscale: Optional[List[float]] = None,
     showcscale: bool = True,
+    text: Optional[List[List[str]]] = None,
+    texttemplate: str = "%{text}",
+    text_size: Optional[int] = None,
 ) -> EZPlotlyPlot:
     """
-    Plot heatmap
+    Plot heatmap.
 
     :param z: 2-D heatmap as `Sequence[Sequence[float]]`
     :param xlabels: The xlabels as `Sequence[Any]`
@@ -781,6 +823,9 @@ def heatmap(
     :param y_dtick: The plotting delta tick (i.e. tick length) of the y-axis as `Optional[float]`
     :param cscale: The color scale for heatmap [c_lower_lim, c_upper_lim] as `Optional[List[float]]`
     :param showcscale: Whether to show the color scale or not as `bool`
+    :param text: Text per heatmap box as `Optional[List[List[str]]]`
+    :param texttemplate: Text template as Optional[str]`
+    :param text_size: Size of text as `Optional[int]`
     :return:
         EZPlotlyPlot object representing heatmap
     """
@@ -796,9 +841,23 @@ def heatmap(
         zmin = cscale[0]
         zmax = cscale[1]
 
+    # size
+    if text_size is not None:
+        textfont = {"size": text_size}
+    else:
+        textfont = {"size": 10}
+
     # make heatmap object
     heatmap_obj = go.Heatmap(
-        z=z, x=xlabels, y=ylabels, zmin=zmin, zmax=zmax, showscale=showcscale,
+        z=z,
+        x=xlabels,
+        y=ylabels,
+        zmin=zmin,
+        zmax=zmax,
+        showscale=showcscale,
+        text=text,
+        texttemplate=texttemplate,
+        textfont=textfont,
     )
 
     # return
@@ -822,12 +881,18 @@ def show(fig: Any) -> None:
     Plots a single figure.
 
     :param fig: The figure to plot.
-    :return:
     """
     plotly.offline.iplot(fig, filename="Subplot")
 
 
 def extract_panel_title_positions(fig: Any) -> Dict[Any, Any]:
+    """
+    Extracts panel title position.
+
+    :param fig: The figure
+    :return:
+        Title positions in dict
+    """
     title_annotations = list(fig["layout"]["annotations"])
     return {t["text"]: (t["x"], t["y"]) for t in title_annotations}
 
@@ -859,7 +924,8 @@ def plot_all(
     :param showlegend: Whether to show the plot legends as `bool`
     :param chrpacked: Whether the plots are chrpacked (useful for bio chromosome plots) as `bool`
     :param outfile: The file to write the plot to as `Optional[str]`
-    :param suppress_output: Whether to suppress output or not as `bool`
+    :param suppress_output: Whether to suppress output or not as `bool.` Superseded by global plotly
+        plot_settings.SUPPRESS_PLOT.
     :return:
         Base Plotly figure representing plot as `EZPlotlyPlot`
     """
@@ -898,7 +964,7 @@ def plot_all(
             panel_titles[panel_index - 1] = plot_title
 
     # make overall figure
-    fig = plotly.subplots.make_subplots(
+    fig = make_subplots(
         rows=num_rows, cols=numcols, subplot_titles=panel_titles, print_grid=False
     )
     title_positions = extract_panel_title_positions(fig)
@@ -925,7 +991,7 @@ def plot_all(
         col_index = int((panel_index - 1) % numcols + 1)
 
         # set up axis for figure
-        fig.append_trace(plot, row_index, col_index)
+        fig.add_trace(plot, row_index, col_index)
         fig["layout"]["xaxis" + str(panel_index)].update(showgrid=True)
         fig["layout"]["yaxis" + str(panel_index)].update(showgrid=True)
 
@@ -974,7 +1040,7 @@ def plot_all(
     if withhold:  # return fig (if additional custom changes need to be made)
         return fig
     else:
-        if not suppress_output:
+        if not plot_settings.SUPPRESS_PLOTS and not suppress_output:
             plotly.offline.iplot(fig)
         if outfile is not None:
             plotly.io.write_image(fig, file=outfile)
