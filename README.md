@@ -27,4 +27,4 @@ For more examples, checkout run the EZPlotlyExamples.ipynb and EZPlotlyBioExampl
 
 # EasyPlotly_bio for Bioinformaticians:
 
-In the bioinformatics domain? Currently in the works is a bioinformatics extension (EasyPlotly_bio) for making common bioinformatics plots such as qqplots, chromosome rolling medians, chromsome count bar charts, and chromosome histograms.
+In the bioinformatics domain? EasyPlotly_bio supports making common bioinformatics plots such as qqplots, chromosome rolling medians, chromsome count bar charts, and chromosome histograms.
