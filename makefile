@@ -1,6 +1,6 @@
 conda_dev:
 	conda env remove -n ezplotly_env
-	conda env create -f conda_osx.yaml
+	conda env create -f conda.yaml
 
 build:
 	rm -rf dist
