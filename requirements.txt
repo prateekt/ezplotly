@@ -5,3 +5,6 @@ pandas
 scikit-learn
 kaleido
 jupyter
+'black[jupyter]'
+nose
+twine

@@ -7,6 +7,10 @@ requires = [
     "scipy",
     "pandas",
     "scikit-learn",
-    "kaleido"
+    "kaleido",
+    "jupyter",
+    "black[jupyter]",
+    "nose",
+    "twine"
 ]
 build-backend = "setuptools.build_meta"
