@@ -5,6 +5,6 @@ pandas
 scikit-learn
 kaleido
 jupyter
-'black[jupyter]'
+black[jupyter]
 nose
 twine
