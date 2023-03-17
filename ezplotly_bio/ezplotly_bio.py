@@ -832,7 +832,6 @@ def nonparametric_ci(
 
     # generate plots
     if ci_plot_type == "line":
-
         # get name
         if name is None:
             ci_name = " (CI=" + str(conf * 100.0) + "%" + ")"
@@ -865,7 +864,6 @@ def nonparametric_ci(
         else:
             ep.plot_all(figs_list, panels=[1, 1, 1], outfile=outfile)
     elif ci_plot_type == "point":
-
         # gen EZPlotlyPlot
         plot = ep.line(
             x=x,

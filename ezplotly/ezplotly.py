@@ -903,6 +903,7 @@ def plot_all(
     numcols: int = 1,
     title: Optional[str] = None,
     showlegend: bool = False,
+    paging: Optional[Dict[str, int]] = None,
     chrpacked: bool = False,
     outfile: Optional[str] = None,
     suppress_output: bool = False,
@@ -920,6 +921,11 @@ def plot_all(
     :param title: The title of the overall plot as `Optional[str]`
     :param showlegend: Whether to show the plot legends as `bool`
     :param chrpacked: Whether the plots are chrpacked (useful for bio chromosome plots) as `bool`
+    :param paging: The paging settings as `Optional[Dict[str, int]].` Paging allows automatic splitting
+                   of the plots into multiple subplots and subplots into different page *.png figures.
+                   Dict contains the following parameters:
+                        num_plots_per_subplot: The number of ezplotly plots per subplot as `int`
+                        num_subplots_per_page: The number of subplots per page as `int`
     :param outfile: The file to write the plot to as `Optional[str]`
     :param suppress_output: Whether to suppress output or not as `bool.` Superseded by global plotly
         plot_settings.SUPPRESS_PLOT.
@@ -930,6 +936,56 @@ def plot_all(
     # if single EZPlotlyPlot, make list for consistency
     if isinstance(plots, EZPlotlyPlot):
         plots = [plots]
+
+    # determine if paging is used and make recursive calls as necessary
+    if paging is not None:
+        # check paging parameters
+        if "num_plots_per_subplot" not in paging:
+            raise ValueError("num_plots_per_subplot must be specified in paging dict")
+        if "num_subplots_per_page" not in paging:
+            raise ValueError("num_subplots_per_page must be specified in paging dict")
+
+        # make recursive calls
+        num_plots_per_subplot = paging["num_plots_per_subplot"]
+        num_subplots_per_page = paging["num_subplots_per_page"]
+        num_subplots = int(np.ceil(len(plots) / num_plots_per_subplot))
+        num_pages = int(np.ceil(num_subplots / num_subplots_per_page))
+        for page_index in range(0, num_pages):
+            start_subplot_index = page_index * num_subplots_per_page
+            end_subplot_index = start_subplot_index + num_subplots_per_page
+            start_plot_index = start_subplot_index * num_plots_per_subplot
+            end_plot_index = min(end_subplot_index * num_plots_per_subplot, len(plots))
+            if outfile is not None:
+                outfile_ext = "." + outfile.split(".")[-1]
+                new_outfile = outfile.replace(
+                    outfile_ext, f"_{page_index}" + outfile_ext
+                )
+            else:
+                new_outfile = None
+            new_panels = list()
+            panel_index = 0
+            for plot_index in range(start_plot_index, end_plot_index):
+                if plot_index % num_plots_per_subplot == 0:
+                    panel_index += 1
+                new_panels.append(panel_index)
+            new_height = height
+            if panel_index < num_subplots_per_page:
+                new_height = height * panel_index / num_subplots_per_page
+            plot_all(
+                plots=plots[start_plot_index:end_plot_index],
+                panels=new_panels,
+                height=new_height,
+                width=width,
+                withhold=False,
+                numcols=numcols,
+                title=title,
+                showlegend=showlegend,
+                paging=None,
+                chrpacked=chrpacked,
+                outfile=new_outfile,
+                suppress_output=suppress_output,
+            )
+        return None
 
     # compute num panels needed to display everything
     if panels is None:
@@ -968,7 +1024,6 @@ def plot_all(
 
     # loop over plot generation
     for plot_index in range(0, len(plots)):
-
         # property extraction
         panel_index = panels[plot_index]
         p = plots[plot_index]

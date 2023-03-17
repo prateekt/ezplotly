@@ -10,6 +10,7 @@ class EnvironmentSettings(Enum):
     """
     Enum for environment settings.
     """
+
     JUPYTER = "Jupyter"
     TERMINAL = "Terminal"
     UNKNOWN = "Unknown"
@@ -21,9 +22,9 @@ def get_environment() -> EnvironmentSettings:
     :return: the environment that the code is running in.
     """
     shell = get_ipython().__class__.__name__
-    if shell == 'ZMQInteractiveShell':
+    if shell == "ZMQInteractiveShell":
         return EnvironmentSettings.JUPYTER
-    elif shell == 'TerminalInteractiveShell':
+    elif shell == "TerminalInteractiveShell":
         return EnvironmentSettings.TERMINAL
     else:
         return EnvironmentSettings.UNKNOWN
