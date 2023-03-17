@@ -4,9 +4,6 @@ import numpy as np
 import plotly
 import plotly.graph_objs as go
 import ezplotly.settings as plot_settings
-
-# Legacy Invocation
-# plotly.offline.init_notebook_mode()  # run at the start of every notebook
 from plotly.subplots import make_subplots
 
 
