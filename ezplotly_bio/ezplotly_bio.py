@@ -18,7 +18,7 @@ def manhattan_plot(
     Plot a manhattan plot of p-values from a pandas dataframe containing chromosome position p-values.
     Makes a plot separately for each chromosome specified in dataframe.
 
-    :param df: A `pd.DataFrame` containing columns (chr, pos, pval).
+    :param df: A `pd.DataFrame` containing columns (chr, pos, p-value).
     :param title: The title of the overall plot as `Optional[str]`
     :param height: The height of the plot as `Optional[int]`
     :param withhold: Whether to plot the plot or withhold and return the plot to the user as `bool`
@@ -421,8 +421,8 @@ def roc(
     """
     Make Receiver Operating Characteristic (ROC) Curve.
 
-    :param preds: The raw prediction values as an N x L matrix np.array[float] where N is the number of methods and L
-        is the number of labels.
+    :param preds: The raw prediction values as an N x L matrix `np.array[float]`
+                  where N is the number of methods and L is the number of labels.
     :param gt: The ground truth labels as an (L,) np.array[int]
     :param panel: The panel to plot the ROC curve as `int`
     :param names: The names of the methods as `Optional[List[str]]`
@@ -695,7 +695,7 @@ def rcdf(
 def corr_plot(
     x: np.array,
     y: np.array,
-    error_y: Optional[Sequence[float]] = None,
+    error_y: Optional[Union[Sequence[float], np.array]] = None,
     xlabel: Optional[str] = None,
     ylabel: Optional[str] = None,
     title: Optional[str] = None,
@@ -715,7 +715,10 @@ def corr_plot(
 
     :param x: First data vector as 1-D `np.array`
     :param y: Second data vector as 1-D `np.array`
-    :param error_y: Error bar length as Sequence[float]`
+    :param error_y: The y-error data to plot as `Optional[Union[Sequence[float], np.array]]`
+        If `error_y` is a sequence, it must be the same length as `y`.
+        If `error_y` is a numpy array of shape (2, N), where N is the length of `y`,
+         where the first row is the lower error and the second row is the upper error.
     :param xlabel: X-axis label as `Optional[str]`
     :param ylabel: Y-axis label as `Optional[str]`
     :param title: Plot title as `Optional[str]`
@@ -832,7 +835,6 @@ def nonparametric_ci(
 
     # generate plots
     if ci_plot_type == "line":
-
         # get name
         if name is None:
             ci_name = " (CI=" + str(conf * 100.0) + "%" + ")"
@@ -865,13 +867,13 @@ def nonparametric_ci(
         else:
             ep.plot_all(figs_list, panels=[1, 1, 1], outfile=outfile)
     elif ci_plot_type == "point":
-
         # gen EZPlotlyPlot
+        ucl = np.abs(ul - m)
+        lcl = np.abs(ll - m)
         plot = ep.line(
             x=x,
             y=m,
-            ucl=np.abs(ul - m),
-            lcl=np.abs(ll - m),
+            error_y=np.array([lcl, ucl], dtype=float),
             color=color,
             name=name,
             xlabel=xlabel,

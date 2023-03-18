@@ -21,6 +21,37 @@ class EZPlotlyPlot(NamedTuple):
     y_dtick: Optional[float]
 
 
+def _prepare_error_bars(
+    error_y: Optional[Union[Sequence[float], np.array]], y: np.array
+) -> Optional[Dict[str, Any]]:
+    """
+    Prepares error bar data for plotting.
+    :param error_y: The error bar values as `Optional[Sequence[float], Optional[np.array]]`
+    :return:
+        A dictionary containing the error bar data as `Dict[str, Any]`
+    """
+    if error_y is not None:
+        if isinstance(error_y, np.ndarray):
+            if not error_y.shape == (2, len(y)):
+                raise ValueError(
+                    "Error bar array must have shape (2, len(y)) if specified as numpy array."
+                )
+            lower_error = error_y[0, :]
+            higher_error = error_y[1, :]
+            error_y_dict = dict(
+                type="data", array=higher_error, arrayminus=lower_error, visible=True
+            )
+        elif isinstance(error_y, list):
+            error_y_dict = dict(type="data", array=error_y, visible=True)
+        else:
+            raise TypeError(
+                "Error bar values must be a numpy array or a list of floats."
+            )
+    else:
+        error_y_dict = dict(type="data", array=None, visible=False)
+    return error_y_dict
+
+
 def hist(
     data: Sequence[Any],
     min_bin: Optional[float] = None,
@@ -117,7 +148,7 @@ def hist(
 def bar(
     y: Sequence[Any],
     x: Sequence[Any] = (),
-    error_y: Optional[Sequence[float]] = None,
+    error_y: Optional[Union[Sequence[float], np.array]] = None,
     title: Optional[str] = None,
     xlabel: Optional[str] = None,
     ylabel: Optional[str] = None,
@@ -139,7 +170,10 @@ def bar(
 
     :param y: The data for x-axis values as `Sequence[Any]`
     :param x: The x-axis bar labels as `Sequence[Any]`
-    :param error_y: Error bar values as `Optional[Sequence[float]]`
+    :param error_y: The error on the y-axis values as `Optional[Union[Sequence[float], np.array]]`
+        If a sequence, must be the same length as `y`
+        If `error_y` is a numpy array of shape (2, N), where N is the length of `y`,
+        where the first row is the lower error and the second row is the upper error.
     :param title: Plot title as `Optional[str]`
     :param xlabel: X-axis label as `Optional[str]`
     :param ylabel: Y-axis label as `Optional[str]`
@@ -174,7 +208,7 @@ def bar(
         name=name,
         x=x,
         y=y,
-        error_y=dict(type="data", array=error_y, visible=True),
+        error_y=_prepare_error_bars(error_y=error_y, y=y),
         text=text,
         textfont=dict(size=textsize),
         textposition=textposition,
@@ -301,7 +335,7 @@ def bar_hist(
 def scatter(
     x: Sequence[Any],
     y: Sequence[Any],
-    error_y: Optional[Sequence[float]] = None,
+    error_y: Optional[Union[Sequence[float], np.array]] = None,
     title: Optional[str] = None,
     xlabel: Optional[str] = None,
     ylabel: Optional[str] = None,
@@ -325,7 +359,10 @@ def scatter(
 
     :param x: The x-data to plot as `Sequence[Any]`
     :param y: The y-data to plot as `Sequence[Any]`
-    :param error_y: Error bar length as Sequence[float]`
+    :param error_y: The y-error data to plot as `Optional[Union[Sequence[float], np.array]]`
+        If `error_y` is a sequence, it must be the same length as `y`.
+        If `error_y` is a numpy array of shape (2, N), where N is the length of `y`,
+         where the first row is the lower error and the second row is the upper error.
     :param title: Plot title as `Optional[str]`
     :param xlabel: X-axis label as `Optional[str]`
     :param ylabel: Y-axis label as `Optional[str]`
@@ -372,7 +409,7 @@ def scatter(
         name=name,
         x=x,
         y=y,
-        error_y=dict(type="data", array=error_y, visible=True),
+        error_y=_prepare_error_bars(error_y=error_y, y=y),
         mode=mode,
         visible=True,
         marker=marker,
@@ -402,7 +439,7 @@ def scatter(
 def scattergl(
     x: Sequence[Any],
     y: Sequence[Any],
-    error_y: Optional[Sequence[float]] = None,
+    error_y: Optional[Union[Sequence[float], np.array]] = None,
     title: Optional[str] = None,
     xlabel: Optional[str] = None,
     ylabel: Optional[str] = None,
@@ -426,7 +463,10 @@ def scattergl(
 
     :param x: The x-data to plot as `Sequence[Any]`
     :param y: The y-data to plot as `Sequence[Any]`
-    :param error_y: Error bar lengths as Sequence[float]`
+    :param error_y: The y-error data to plot as `Optional[Union[Sequence[float], np.array]]`
+        If `error_y` is a sequence, it must be the same length as `y`.
+        If `error_y` is a numpy array of shape (2, N), where N is the length of `y`,
+         where the first row is the lower error and the second row is the upper error.
     :param title: Plot title as `Optional[str]`
     :param xlabel: X-axis label as `Optional[str]`
     :param ylabel: Y-axis label as `Optional[str]`
@@ -465,11 +505,6 @@ def scattergl(
     else:
         mode = "markers"
 
-    # error y dict
-    error_y_dict = None
-    if error_y is not None:
-        error_y_dict = dict(type="data", array=error_y, visible=True)
-
     # legend properties
     showlegend = name is not None
 
@@ -478,7 +513,7 @@ def scattergl(
         name=name,
         x=x,
         y=y,
-        error_y=error_y_dict,
+        error_y=_prepare_error_bars(error_y=error_y, y=y),
         mode=mode,
         visible=True,
         marker=marker,
@@ -508,9 +543,7 @@ def scattergl(
 def line(
     x: Sequence[Any],
     y: Sequence[Any],
-    error_y: Optional[Sequence[float]] = None,
-    lcl: Optional[Sequence[float]] = None,
-    ucl: Optional[Sequence[float]] = None,
+    error_y: Optional[Union[Sequence[float], np.array]] = None,
     title: Optional[str] = None,
     xlabel: Optional[str] = None,
     ylabel: Optional[str] = None,
@@ -535,9 +568,10 @@ def line(
 
     :param x: x-data as `Sequence[Any]`
     :param y: y-data as `Sequence[Any]`
-    :param error_y: Error bar lengths as `Optional[Sequence[float]]`
-    :param lcl: Lower confidence limits as `Optional[Sequence[float]]`
-    :param ucl: Upper confidence limits as `Optional[Sequence[float]]`
+    :param error_y: The y-error data to plot as `Optional[Union[Sequence[float], np.array]]`
+        If `error_y` is a sequence, it must be the same length as `y`.
+        If `error_y` is a numpy array of shape (2, N), where N is the length of `y`,
+         where the first row is the lower error and the second row is the upper error.
     :param title: Plot title as `Optional[str]`
     :param xlabel: The x-axis label as `Optional[str]`
     :param ylabel: The y-axis label as `Optional[str]`
@@ -570,14 +604,6 @@ def line(
         line_dict["color"] = color
     if dash is not None:
         line_dict["dash"] = dash
-    if lcl is not None and ucl is not None:
-        error_y_dict = dict(
-            type="data", symmetric=False, array=ucl, arrayminus=lcl, visible=True
-        )
-    elif error_y is not None:
-        error_y_dict = dict(type="data", array=error_y, visible=True)
-    else:
-        error_y_dict = None
 
     # annotation mode
     if point_anno is not None:
@@ -593,7 +619,7 @@ def line(
         name=name,
         x=x,
         y=y,
-        error_y=error_y_dict,
+        error_y=_prepare_error_bars(error_y=error_y, y=y),
         line=line_dict,
         mode=mode,
         text=point_anno,
@@ -681,6 +707,7 @@ def scatterheat(
     xbins: Sequence[float],
     ybins: Sequence[float],
     zscale: str = "linear",
+    error_y: Optional[Union[Sequence[float], np.array]] = None,
     title: Optional[str] = None,
     xlabel: Optional[str] = None,
     ylabel: Optional[str] = None,
@@ -706,6 +733,10 @@ def scatterheat(
     :param xbins: x-axis bin edges for density heatmap as `Sequence[float]`
     :param ybins: y-axis bin edges for density heatmap as `Sequence[float]`
     :param zscale: The scale of the frequence dimension ('log', 'linear') as `str`
+    :param error_y: The y-error data to plot as `Optional[Union[Sequence[float], np.array]]`
+        If `error_y` is a sequence, it must be the same length as `y`.
+        If `error_y` is a numpy array of shape (2, N), where N is the length of `y`,
+         where the first row is the lower error and the second row is the upper error.
     :param title: Plot title as `Optional[str]`
     :param xlabel: The x-axis label as `Optional[str]`
     :param ylabel: The y-axis label as `Optional[str]`
@@ -726,7 +757,6 @@ def scatterheat(
     :return:
         List[EZPlotlyPlot] representing figure set (if plot=False)
     """
-
     # transform data using np histogram
     z = np.histogram2d(x=y, y=x, bins=[ybins, xbins])[0]
     xlabels = xbins
@@ -747,6 +777,7 @@ def scatterheat(
         scattergl(
             x=x,
             y=y,
+            error_y=error_y,
             xlabel=xlabel,
             ylabel=ylabel,
             xlim=xlim,
@@ -903,6 +934,7 @@ def plot_all(
     numcols: int = 1,
     title: Optional[str] = None,
     showlegend: bool = False,
+    paging: Optional[Dict[str, int]] = None,
     chrpacked: bool = False,
     outfile: Optional[str] = None,
     suppress_output: bool = False,
@@ -920,6 +952,11 @@ def plot_all(
     :param title: The title of the overall plot as `Optional[str]`
     :param showlegend: Whether to show the plot legends as `bool`
     :param chrpacked: Whether the plots are chrpacked (useful for bio chromosome plots) as `bool`
+    :param paging: The paging settings as `Optional[Dict[str, int]].` Paging allows automatic splitting
+                   of the plots into multiple subplots and subplots into different page *.png figures.
+                   Dict contains the following parameters:
+                        num_plots_per_subplot: The number of ezplotly plots per subplot as `int`
+                        num_subplots_per_page: The number of subplots per page as `int`
     :param outfile: The file to write the plot to as `Optional[str]`
     :param suppress_output: Whether to suppress output or not as `bool.` Superseded by global plotly
         plot_settings.SUPPRESS_PLOT.
@@ -930,6 +967,56 @@ def plot_all(
     # if single EZPlotlyPlot, make list for consistency
     if isinstance(plots, EZPlotlyPlot):
         plots = [plots]
+
+    # determine if paging is used and make recursive calls as necessary
+    if paging is not None:
+        # check paging parameters
+        if "num_plots_per_subplot" not in paging:
+            raise ValueError("num_plots_per_subplot must be specified in paging dict")
+        if "num_subplots_per_page" not in paging:
+            raise ValueError("num_subplots_per_page must be specified in paging dict")
+
+        # make recursive calls
+        num_plots_per_subplot = paging["num_plots_per_subplot"]
+        num_subplots_per_page = paging["num_subplots_per_page"]
+        num_subplots = int(np.ceil(len(plots) / num_plots_per_subplot))
+        num_pages = int(np.ceil(num_subplots / num_subplots_per_page))
+        for page_index in range(0, num_pages):
+            start_subplot_index = page_index * num_subplots_per_page
+            end_subplot_index = start_subplot_index + num_subplots_per_page
+            start_plot_index = start_subplot_index * num_plots_per_subplot
+            end_plot_index = min(end_subplot_index * num_plots_per_subplot, len(plots))
+            if outfile is not None:
+                outfile_ext = "." + outfile.split(".")[-1]
+                new_outfile = outfile.replace(
+                    outfile_ext, f"_{page_index}" + outfile_ext
+                )
+            else:
+                new_outfile = None
+            new_panels = list()
+            panel_index = 0
+            for plot_index in range(start_plot_index, end_plot_index):
+                if plot_index % num_plots_per_subplot == 0:
+                    panel_index += 1
+                new_panels.append(panel_index)
+            new_height = height
+            if panel_index < num_subplots_per_page:
+                new_height = height * panel_index / num_subplots_per_page
+            plot_all(
+                plots=plots[start_plot_index:end_plot_index],
+                panels=new_panels,
+                height=new_height,
+                width=width,
+                withhold=False,
+                numcols=numcols,
+                title=title,
+                showlegend=showlegend,
+                paging=None,
+                chrpacked=chrpacked,
+                outfile=new_outfile,
+                suppress_output=suppress_output,
+            )
+        return None
 
     # compute num panels needed to display everything
     if panels is None:
@@ -968,7 +1055,6 @@ def plot_all(
 
     # loop over plot generation
     for plot_index in range(0, len(plots)):
-
         # property extraction
         panel_index = panels[plot_index]
         p = plots[plot_index]
