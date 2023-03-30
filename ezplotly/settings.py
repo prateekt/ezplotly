@@ -1,7 +1,6 @@
 from enum import Enum
 
 import plotly
-from IPython import get_ipython
 
 SUPPRESS_PLOTS: bool = False
 
@@ -21,12 +20,17 @@ def get_environment() -> EnvironmentSettings:
     Gets the environment settings of plotly.
     :return: the environment that the code is running in.
     """
-    shell = get_ipython().__class__.__name__
-    if shell == "ZMQInteractiveShell":
-        return EnvironmentSettings.JUPYTER
-    elif shell == "TerminalInteractiveShell":
-        return EnvironmentSettings.TERMINAL
-    else:
+    try:
+        from IPython import get_ipython
+
+        shell = get_ipython().__class__.__name__
+        if shell == "ZMQInteractiveShell":
+            return EnvironmentSettings.JUPYTER
+        elif shell == "TerminalInteractiveShell":
+            return EnvironmentSettings.TERMINAL
+        else:
+            return EnvironmentSettings.UNKNOWN
+    except:
         return EnvironmentSettings.UNKNOWN
 
 
