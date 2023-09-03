@@ -1,12 +1,40 @@
 [build-system]
-requires = [
-    "setuptools>=42",
-    "wheel",
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ezplotly"
+version = "0.1.3.0.8"
+authors = [
+  { name="Prateek Tandon", email="prateek1.tandon@gmail.com" },
+]
+description = "An easy wrapper for making Plotly plots in Jupyter notebooks"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11.4"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "hatch",
     "plotly",
     "numpy",
     "scipy",
     "pandas",
     "scikit-learn",
     "kaleido",
+    "jupyter",
+    "black[jupyter]",
 ]
-build-backend = "setuptools.build_meta"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "/.github",
+    "/.gitignore",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/prateekt/ezplotly"
+"Bug Tracker" = "https://github.com/prateekt/ezplotly/issues"

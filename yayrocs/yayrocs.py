@@ -1,7 +1,8 @@
-from typing import Tuple, List
+from typing import Tuple
+
 import numpy as np
-from sklearn.neighbors import KernelDensity
 import scipy.signal as ss
+from sklearn.neighbors import KernelDensity
 
 
 def roc(pred: np.array, gt: np.array) -> Tuple[np.array, np.array]:
@@ -104,12 +105,12 @@ def compute_p_value(
 
     # identify ranks
     rank = np.where(combined_data == observed)
-    lrank = rank[0][0]
-    rrank = n - rank[0][-1] - 1
+    left_rank = rank[0][0]
+    right_rank = n - rank[0][-1] - 1
 
     # tails
-    lp = lrank / n
-    rp = rrank / n
+    lp = left_rank / n
+    rp = right_rank / n
     if tailed == "left":
         p_val = lp
     elif tailed == "right":
@@ -205,7 +206,7 @@ def find_modes(
     distr, bin_centers = pdf(data=data, bin_edges=bin_edges, method=method)
 
     # find relative maxima
-    maxima_inds = ss.argrelextrema(distr, np.greater)[0]
-    x_maxima = bin_edges[maxima_inds].squeeze()
-    y_maxima = distr[maxima_inds].squeeze()
+    maxima_indices = ss.argrelextrema(distr, np.greater)[0]
+    x_maxima = bin_edges[maxima_indices].squeeze()
+    y_maxima = distr[maxima_indices].squeeze()
     return x_maxima, y_maxima

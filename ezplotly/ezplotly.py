@@ -170,7 +170,7 @@ def bar(
 
     :param y: The data for x-axis values as `Sequence[Any]`
     :param x: The x-axis bar labels as `Sequence[Any]`
-    :param error_y: The error on the y-axis values as `Optional[Union[Sequence[float], np.array]]`
+    :param error_y: The error on the y-axis values as `Optional[Union[Sequence[float], np.ndarray]]`
         If a sequence, must be the same length as `y`
         If `error_y` is a numpy array of shape (2, N), where N is the length of `y`,
         where the first row is the lower error and the second row is the upper error.
@@ -184,8 +184,8 @@ def bar(
     :param yscale: The scale of the y-axis ('log', 'linear') as `Optional[str]`
     :param x_dtick: The plotting delta tick (i.e. tick length) of the x-axis as `Optional[float]`
     :param y_dtick: The plotting delta tick (i.e. tick length) of the y-axis as `Optional[float]`
-    :param text: Bar text for each bar as `Optional[Union[Sequence[str], str]]]`
-    :param textsize: Text size for each bar as `Optional[Union[Sequence[int], int]]]`
+    :param text: Bar text for each bar as `Optional[Union[Sequence[str], str]]`
+    :param textsize: Text size for each bar as `Optional[Union[Sequence[int], int]]`
     :param textposition:  Bar text position as `Optional[Union[Sequence[str], str]]`
     :param hovertext: Hover text associated with bars as `Optional[Union[Sequence[str], str]]`
     :param color: The color of the bar series as `Optional[str]`
@@ -359,7 +359,7 @@ def scatter(
 
     :param x: The x-data to plot as `Sequence[Any]`
     :param y: The y-data to plot as `Sequence[Any]`
-    :param error_y: The y-error data to plot as `Optional[Union[Sequence[float], np.array]]`
+    :param error_y: The y-error data to plot as `Optional[Union[Sequence[float], np.ndarray]]`
         If `error_y` is a sequence, it must be the same length as `y`.
         If `error_y` is a numpy array of shape (2, N), where N is the length of `y`,
          where the first row is the lower error and the second row is the upper error.
@@ -372,8 +372,8 @@ def scatter(
     :param marker_size: The size of a marker as `Optional[float]`
     :param marker_color: The color of a marker as `Optional[str]`
     :param name: The name of the scatter plot as `Optional[str]` (useful for plotting series)
-    :param point_anno: Text annotations for each point as `Optional[Union[Sequence[str], str]]]`
-    :param textsize: Text size for each bar as `Optional[Union[Sequence[int], int]]]`
+    :param point_anno: Text annotations for each point as `Optional[Union[Sequence[str], str]]`
+    :param textsize: Text size for each bar as `Optional[Union[Sequence[int], int]]`
     :param textposition:  Bar text position as `Optional[Union[Sequence[str], str]]`
     :param hovertext: Hover text associated with bars as `Optional[Union[Sequence[str], str]]`
     :param xscale: The scale of the x-axis ('log', 'linear') as `Optional[str]`
@@ -481,7 +481,7 @@ def scattergl(
     :param textposition: The text position as `Optional[Union[Sequence[str], str]]`
     :param hovertext: The hover text associated with each point as `Optional[Union[Sequence[str], str]]`
     :param xscale: The scale of the x-axis ('log', 'linear') as `Optional[str]`
-    :param yscale: The scale of the y-axis ('log', 'linear') as 'Optiona[str]`
+    :param yscale: The scale of the y-axis ('log', 'linear') as `Optional[str]`
     :param x_dtick: The plotting delta tick (i.e. tick length) of the x-axis as `Optional[float]`
     :param y_dtick: The plotting delta tick (i.e. tick length) of the y-axis as `Optional[float]`
     :return:
@@ -568,7 +568,7 @@ def line(
 
     :param x: x-data as `Sequence[Any]`
     :param y: y-data as `Sequence[Any]`
-    :param error_y: The y-error data to plot as `Optional[Union[Sequence[float], np.array]]`
+    :param error_y: The y-error data to plot as `Optional[Union[Sequence[float], np.ndarray]]`
         If `error_y` is a sequence, it must be the same length as `y`.
         If `error_y` is a numpy array of shape (2, N), where N is the length of `y`,
          where the first row is the lower error and the second row is the upper error.
@@ -581,7 +581,7 @@ def line(
     :param color: The color of the line as `Optional[str]`
     :param name: The name of the line plot as `Optional[str]` (useful for plotting as series)
     :param point_anno: Text annotations for each point as `Optional[Union[Sequence[str], str]]`
-    :param textsize: Text size for each bar as `Optional[Union[Sequence[int], int]]]`
+    :param textsize: Text size for each bar as `Optional[Union[Sequence[int], int]]`
     :param textposition: The text position as `Optional[Union[Sequence[str], str]]`
     :param hovertext: The hover text associated with each point as `Optional[Union[Sequence[str], str]]`
     :param xscale: The scale of the x-axis ('log', 'linear') as `Optional[str]`
@@ -732,8 +732,8 @@ def scatterheat(
     :param y: The y-axis data as `Sequence[float]`
     :param xbins: x-axis bin edges for density heatmap as `Sequence[float]`
     :param ybins: y-axis bin edges for density heatmap as `Sequence[float]`
-    :param zscale: The scale of the frequence dimension ('log', 'linear') as `str`
-    :param error_y: The y-error data to plot as `Optional[Union[Sequence[float], np.array]]`
+    :param zscale: The scale of the frequency dimension ('log', 'linear') as `str`
+    :param error_y: The y-error data to plot as `Optional[Union[Sequence[float], np.ndarray]]`
         If `error_y` is a sequence, it must be the same length as `y`.
         If `error_y` is a numpy array of shape (2, N), where N is the length of `y`,
          where the first row is the lower error and the second row is the upper error.
@@ -757,8 +757,19 @@ def scatterheat(
     :return:
         List[EZPlotlyPlot] representing figure set (if plot=False)
     """
+    # convert to numpy arrays if not already
+    if not isinstance(x, np.ndarray):
+        x = np.array(x)
+    if not isinstance(y, np.ndarray):
+        y = np.array(y)
+    if not isinstance(xbins, np.ndarray):
+        xbins = np.array(xbins)
+    if not isinstance(ybins, np.ndarray):
+        ybins = np.array(ybins)
+    bins = np.array([ybins, xbins])
+
     # transform data using np histogram
-    z = np.histogram2d(x=y, y=x, bins=[ybins, xbins])[0]
+    z = np.histogram2d(x=y, y=x, bins=bins)[0]
     xlabels = xbins
     ylabels = ybins
 

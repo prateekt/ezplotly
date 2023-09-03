@@ -10,6 +10,5 @@ dependencies:
     - scikit-learn
     - kaleido
     - jupyter
-    - nose
+    - hatch
     - 'black[jupyter]'
-    - twine
