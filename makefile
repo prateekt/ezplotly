@@ -4,17 +4,17 @@ conda_dev:
 
 build:
 	rm -rf dist
-	rm -rf build
-	rm -rf ezplotly.egg*
-	python setup.py sdist bdist_wheel
+	hatch build
 
-deploy:
-	twine upload dist/*
+publish:
+	hatch publish
 
 run_notebook_tests:
 	jupyter nbconvert --to notebook --execute EZPlotlyExamples.ipynb
 	jupyter nbconvert --to notebook --execute EZPlotlyBioExamples.ipynb
 
 clean:
-	rm -rf *.nbconvert*
 	rm -rf test_figs
+	rm -rf dist
+	rm -rf .ipynb_checkpoints
+	rm *.nbconvert.ipynb

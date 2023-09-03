@@ -423,7 +423,7 @@ def roc(
 
     :param preds: The raw prediction values as an N x L matrix `np.array[float]`
                   where N is the number of methods and L is the number of labels.
-    :param gt: The ground truth labels as an (L,) np.array[int]
+    :param gt: The ground truth labels as an (L, ) np.ndarray[int]
     :param panel: The panel to plot the ROC curve as `int`
     :param names: The names of the methods as `Optional[List[str]]`
     :param title: The title of the plot as `Optional[str]`
@@ -540,9 +540,13 @@ def ecdf(
         bin_size = 1
 
     # histogram data and produce cdf
-    counts, bin_edges = np.histogram(
-        data, bins=np.arange(min_bin, max_bin + bin_size, bin_size)
-    )
+    bin_edges = np.arange(min_bin, max_bin + bin_size, bin_size)
+    counts, _ = np.histogram(data, bins=(bin_edges + np.finfo(float).eps))
+
+    # insert 0 of counts so that bins are aligned
+    counts = np.insert(counts, 0, 0)
+
+    # calc cdf
     counts_sum = np.sum(counts)
     counts = counts / counts_sum
     cdf = np.cumsum(counts)
@@ -552,7 +556,7 @@ def ecdf(
         if ylabel is None:
             ylabel = "Cum Freq"
         cdf_line = ep.line(
-            x=bin_edges[:-1],
+            x=bin_edges,
             y=counts_sum * cdf,
             title=title,
             xlabel=xlabel,
@@ -569,7 +573,7 @@ def ecdf(
         if ylabel is None:
             ylabel = "CDF"
         cdf_line = ep.line(
-            x=bin_edges[:-1],
+            x=bin_edges,
             y=cdf,
             title=title,
             xlabel=xlabel,
@@ -641,9 +645,13 @@ def rcdf(
         bin_size = 1
 
     # histogram data and produce cdf
-    counts, bin_edges = np.histogram(
-        data, bins=np.arange(min_bin, max_bin + bin_size, bin_size)
-    )
+    bin_edges = np.arange(min_bin, max_bin + bin_size, bin_size)
+    counts, _ = np.histogram(data, bins=(bin_edges + np.finfo(float).eps))
+
+    # insert 0 of counts so that bins are aligned
+    counts = np.insert(counts, 0, 0)
+
+    # calc cdf
     counts_sum = np.sum(counts)
     counts = counts / counts_sum
     cdf = np.cumsum(counts)
@@ -653,7 +661,7 @@ def rcdf(
         if ylabel is None:
             ylabel = "Reverse Cum Freq"
         cdf_line = ep.line(
-            x=bin_edges[:-1],
+            x=bin_edges,
             y=np.round(counts_sum * (1.0 - cdf), 5),
             title=title,
             xlabel=xlabel,
@@ -670,7 +678,7 @@ def rcdf(
         if ylabel is None:
             ylabel = "CDF"
         cdf_line = ep.line(
-            x=bin_edges[:-1],
+            x=bin_edges,
             y=np.round(1.0 - cdf, 5),
             title=title,
             xlabel=xlabel,
@@ -715,7 +723,7 @@ def corr_plot(
 
     :param x: First data vector as 1-D `np.array`
     :param y: Second data vector as 1-D `np.array`
-    :param error_y: The y-error data to plot as `Optional[Union[Sequence[float], np.array]]`
+    :param error_y: The y-error data to plot as `Optional[Union[Sequence[float], np.ndarray]]`
         If `error_y` is a sequence, it must be the same length as `y`.
         If `error_y` is a numpy array of shape (2, N), where N is the length of `y`,
          where the first row is the lower error and the second row is the upper error.
@@ -736,7 +744,7 @@ def corr_plot(
         `Optional[EZPlotlyPlot]` representing correlation plot
     """
 
-    # compute correlation value
+    # compute correlation value (removing nan values)
     corr_val = pd.core.nanops.nancorr(x, y)
 
     # get name of plot
